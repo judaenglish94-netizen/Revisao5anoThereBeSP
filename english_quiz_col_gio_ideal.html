@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Quiz - 5º Ano Turma Milena | Colégio Ideal</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Supabase Client JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        idealOrange: '#F15A24',
+                        idealOrangeLight: '#FFF2EC',
+                        idealPurple: '#2B1842',
+                        boyBg: '#E0F2FE',
+                        girlBg: '#FCE7F3'
+                    },
+                    fontFamily: {
+                        fredoka: ['Fredoka', 'sans-serif'],
+                        nunito: ['Nunito', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #FFF2EC;
+            min-height: 100vh;
+            transition: background-color 0.5s ease;
+            overflow-x: hidden;
+        }
+
+        /* Floating background items animation */
+        @keyframes floatAnim {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-18px) rotate(8deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        .floating-element {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0.22;
+            animation: floatAnim 4s infinite ease-in-out;
+            user-select: none;
+            z-index: 0;
+        }
+
+        /* Custom Scrollbar for study guide */
+        .custom-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #F3F4F6;
+            border-radius: 8px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #F15A24;
+            border-radius: 8px;
+        }
+
+        /* Styling card containers */
+        .card-container {
+            background: #FFFFFF;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px -5px rgba(43, 24, 66, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-hover {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px -4px rgba(241, 90, 36, 0.35);
+        }
+        .btn-hover:active {
+            transform: translateY(0);
+        }
+
+        .word-btn {
+            transition: all 0.15s ease;
+            cursor: pointer;
+            user-select: none;
+        }
+        .word-btn:hover {
+            transform: scale(1.06);
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen text-gray-800 relative">
+
+    <div id="bgElementsContainer" class="fixed inset-0 overflow-hidden pointer-events-none z-0"></div>
+
+    <!-- Header / Brand Bar -->
+    <header class="relative z-10 bg-white border-b-4 border-idealOrange shadow-sm py-4 px-4 sm:px-8">
+        <div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+            
+            <!-- School Logo Representation -->
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-idealOrange rounded-2xl flex items-center justify-center text-white shadow-md font-bold text-2xl font-fredoka">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div class="text-center sm:text-left">
+                    <h1 class="font-fredoka text-2xl font-bold text-idealPurple tracking-tight leading-none">COLÉGIO IDEAL</h1>
+                    <span class="text-xs font-bold text-idealOrange uppercase tracking-wider">Verificação de Aprendizagem</span>
+                </div>
+            </div>
+
+            <!-- Header Info & Supabase Settings Trigger -->
+            <div class="flex items-center gap-3">
+                <span class="bg-orange-100 text-idealPurple border border-orange-200 text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm">
+                    <i class="fa-solid fa-apple-whole text-idealOrange"></i> 5º ANO - TURMA MILENA
+                </span>
+
+                <button id="btnOpenSupabaseModal" title="Configurar Supabase" class="bg-gray-100 hover:bg-idealPurple hover:text-white text-gray-600 px-3 py-1.5 rounded-full text-xs font-bold transition-all border border-gray-200 flex items-center gap-1">
+                    <i class="fa-solid fa-database"></i> Supabase
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="relative z-10 flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 flex flex-col justify-center">
+
+        <!-- ================= PAGE 1: ESTAÇÃO DE ESTUDO ================= -->
+        <section id="page1" class="card-container p-6 sm:p-8 my-auto transition-all">
+            <div class="text-center mb-6">
+                <span class="bg-orange-100 text-idealOrange text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Estudo Guiado</span>
+                <h2 class="font-fredoka text-2xl sm:text-3xl font-bold text-idealPurple mt-2">Revisão de Inglês 🚀</h2>
+                <p class="text-gray-600 text-sm mt-1">Leia o resumo atentamente antes de clicar em Login para fazer o quiz!</p>
+            </div>
+
+            <!-- Scrollable Study Content Box -->
+            <div class="custom-scroll max-h-[380px] overflow-y-auto pr-3 space-y-6 border-2 border-orange-100 rounded-2xl p-4 bg-orange-50/40 text-sm">
+                
+                <!-- Topic 1: There is / There are -->
+                <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-idealOrange space-y-2">
+                    <h3 class="font-fredoka text-lg font-bold text-idealOrange flex items-center gap-2">
+                        <i class="fa-solid fa-shapes"></i> 1. There is vs. There are (Haver / Existir)
+                    </h3>
+                    <p class="text-gray-700">Usamos essas expressões para indicar que algo existe em determinado lugar:</p>
+                    <ul class="space-y-1.5 pl-2">
+                        <li class="bg-orange-50 p-2 rounded-lg border border-orange-100">
+                            <strong class="text-idealOrange">There is</strong> = Usado para o <strong>Singular</strong> (Apenas 1 coisa ou pessoa).
+                            <div class="text-xs text-gray-500 italic mt-0.5">Exemplo: <em>There is a cat under the chair.</em> (Existe um gato debaixo da cadeira.)</div>
+                        </li>
+                        <li class="bg-orange-50 p-2 rounded-lg border border-orange-100">
+                            <strong class="text-idealOrange">There are</strong> = Usado para o <strong>Plural</strong> (2 ou mais coisas/pessoas).
+                            <div class="text-xs text-gray-500 italic mt-0.5">Exemplo: <em>There are three apples in the basket.</em> (Existem três maçãs na cesta.)</div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Topic 2: Simple Present -->
+                <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-idealPurple space-y-3">
+                    <h3 class="font-fredoka text-lg font-bold text-idealPurple flex items-center gap-2">
+                        <i class="fa-solid fa-clock"></i> 2. Simple Present (Presente Simples)
+                    </h3>
+                    <p class="text-gray-700">Usado para descrever rotinas, hábitos e verdades gerais.</p>
+
+                    <div class="bg-purple-50 p-3 rounded-xl border border-purple-100">
+                        <h4 class="font-bold text-idealPurple text-xs uppercase tracking-wider flex items-center gap-1">
+                            <i class="fa-solid fa-star text-amber-500"></i> Regra Especial do HE, SHE, IT (Afirmativa):
+                        </h4>
+                        <p class="text-xs text-gray-600 mt-1">Quando a frase for afirmativa e o sujeito for <strong>He</strong> (Ele), <strong>She</strong> (Ela) ou <strong>It</strong> (Coisa/Animal), acrescentamos <strong>-s</strong>, <strong>-es</strong> ou <strong>-ies</strong> no verbo!</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-2 text-xs font-semibold">
+                            <div class="bg-white p-2 rounded border border-purple-200">He <span class="text-idealOrange">plays</span> soccer. <br><span class="font-normal text-gray-500">(Ele joga futebol.)</span></div>
+                            <div class="bg-white p-2 rounded border border-purple-200">She <span class="text-idealOrange">watches</span> TV. <br><span class="font-normal text-gray-500">(Ela assiste TV.)</span></div>
+                            <div class="bg-white p-2 rounded border border-purple-200">It <span class="text-idealOrange">flies</span> fast. <br><span class="font-normal text-gray-500">(Ele/Ela voa rápido.)</span></div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+                        <div class="bg-emerald-50 p-2.5 rounded-lg border border-emerald-200">
+                            <span class="font-bold text-emerald-800 block">Afirmativa</span>
+                            I play / He plays (Eu jogo / Ele joga)
+                        </div>
+                        <div class="bg-rose-50 p-2.5 rounded-lg border border-rose-200">
+                            <span class="font-bold text-rose-800 block">Negativa</span>
+                            I don't play / He doesn't play
+                        </div>
+                        <div class="bg-amber-50 p-2.5 rounded-lg border border-amber-200">
+                            <span class="font-bold text-amber-800 block">Interrogativa</span>
+                            Do you play? / Does he play?
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Topic 3: Frequency Adverbs -->
+                <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-amber-500 space-y-2">
+                    <h3 class="font-fredoka text-lg font-bold text-amber-600 flex items-center gap-2">
+                        <i class="fa-solid fa-repeat"></i> 3. Advérbios de Frequência (Frequency Adverbs)
+                    </h3>
+                    <p class="text-gray-700">Palavras usadas para dizer com que frequência fazemos algo:</p>
+                    <div class="flex flex-wrap gap-1.5 font-bold text-xs">
+                        <span class="bg-amber-100 text-amber-900 px-2.5 py-1 rounded-md">Always (Sempre)</span>
+                        <span class="bg-amber-100 text-amber-900 px-2.5 py-1 rounded-md">Usually (Geralmente)</span>
+                        <span class="bg-amber-100 text-amber-900 px-2.5 py-1 rounded-md">Often (Frequentemente)</span>
+                        <span class="bg-amber-100 text-amber-900 px-2.5 py-1 rounded-md">Sometimes (Às vezes)</span>
+                        <span class="bg-amber-100 text-amber-900 px-2.5 py-1 rounded-md">Never (Nunca)</span>
+                    </div>
+                    <div class="bg-amber-50 p-3 rounded-lg border border-amber-200 text-xs">
+                        <strong class="text-amber-900 block font-bold mb-0.5">📌 Posicionamento Padrão:</strong>
+                        O advérbio fica <strong>DEPOIS do sujeito</strong> e <strong>ANTES do verbo principal</strong>!
+                        <div class="text-gray-600 italic mt-1">Exemplo: She <u>always</u> <u>eats</u> fruit. (Ela sempre come frutas.)</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Login Action Button -->
+            <div class="mt-6 text-center">
+                <button id="btnLogin" class="btn-hover bg-idealOrange text-white font-fredoka text-lg px-8 py-3.5 rounded-xl shadow-lg hover:bg-orange-600 w-full sm:w-auto inline-flex items-center justify-center gap-2">
+                    <span>Login</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE 2: SELEÇÃO DE ALUNO ================= -->
+        <section id="page2" class="card-container p-6 sm:p-8 hidden my-auto transition-all">
+            <div class="text-center mb-6">
+                <!-- Milena Avatar/Badge -->
+                <div class="inline-flex flex-col items-center mb-2">
+                    <div class="w-20 h-20 rounded-full border-4 border-idealOrange overflow-hidden shadow-md bg-orange-100 flex items-center justify-center">
+                        <i class="fa-solid fa-user-tie text-4xl text-idealOrange"></i>
+                    </div>
+                    <span class="bg-idealPurple text-white text-xs font-bold px-3 py-1 rounded-full -mt-3 shadow">Professora Milena</span>
+                </div>
+
+                <h2 class="font-fredoka text-2xl sm:text-3xl font-bold text-idealPurple">Identificação do Aluno</h2>
+                <p class="text-gray-600 text-sm mt-1">Selecione seu nome na lista oficial da turma para continuar.</p>
+            </div>
+
+            <div class="max-w-md mx-auto space-y-5">
+                <div>
+                    <label for="studentSelect" class="block font-bold text-gray-700 text-sm mb-2">
+                        <i class="fa-solid fa-users text-idealOrange mr-1"></i> Nome Completo:
+                    </label>
+                    <select id="studentSelect" class="w-full p-3.5 bg-gray-50 border-2 border-gray-200 rounded-xl text-gray-800 font-bold focus:border-idealOrange focus:outline-none transition-all shadow-sm">
+                        <option value="">-- Selecione seu nome --</option>
+                    </select>
+                </div>
+
+                <!-- Attempt Alert Message -->
+                <div id="attemptNotice" class="hidden p-4 rounded-xl border text-sm text-center font-semibold"></div>
+
+                <!-- Start Quiz Button (Exact label: Start quiz) -->
+                <button id="btnStartQuiz" disabled class="btn-hover w-full bg-gray-300 text-gray-500 font-fredoka text-lg py-3.5 rounded-xl shadow cursor-not-allowed transition-all flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-play"></i>
+                    <span>Start quiz</span>
+                </button>
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE 3: INTERACTION QUIZ ================= -->
+        <section id="page3" class="card-container p-6 sm:p-8 hidden my-auto transition-all relative">
+            
+            <!-- Quiz Bar Header -->
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pb-4 mb-6 border-b border-gray-100">
+                <div class="flex items-center gap-3">
+                    <div id="studentAvatarIcon" class="w-10 h-10 rounded-full bg-orange-100 text-idealOrange font-bold flex items-center justify-center text-lg shadow-sm">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div>
+                        <h4 id="activeStudentName" class="font-fredoka font-bold text-idealPurple text-base sm:text-lg leading-tight">Aluno</h4>
+                        <span id="activeAttemptCount" class="text-xs text-orange-600 bg-orange-50 px-2 py-0.5 rounded font-bold border border-orange-200">Tentativa 1/3</span>
+                    </div>
+                </div>
+
+                <!-- Stylized Timer -->
+                <div class="bg-idealPurple text-white px-4 py-2 rounded-xl flex items-center gap-2 font-mono text-lg font-bold shadow-md">
+                    <i class="fa-regular fa-clock text-amber-400 animate-spin" style="animation-duration: 9s;"></i>
+                    <span id="quizTimerDisplay">00:00</span>
+                </div>
+            </div>
+
+            <!-- Dynamic Progress Bar -->
+            <div class="w-full bg-gray-100 h-2.5 rounded-full overflow-hidden mb-6">
+                <div id="quizProgressBar" class="bg-idealOrange h-full transition-all duration-300" style="width: 3.33%;"></div>
+            </div>
+
+            <!-- Question Metadata Bar -->
+            <div class="flex items-center justify-between mb-4">
+                <span id="questionTopicBadge" class="text-xs font-bold text-idealOrange bg-orange-100 px-3 py-1 rounded-full">Tópico</span>
+                <span id="questionCounterBadge" class="text-xs font-bold text-gray-500">Questão 1 de 30</span>
+            </div>
+
+            <!-- Question Card -->
+            <div class="mb-6">
+                <h3 id="questionTitleText" class="font-fredoka text-xl text-idealPurple font-bold leading-snug">
+                    Carregando pergunta...
+                </h3>
+                <p id="questionSubtitleText" class="text-xs text-gray-500 mt-1 italic hidden"></p>
+            </div>
+
+            <!-- Options Box: Choice Questions -->
+            <div id="choiceOptionsContainer" class="grid grid-cols-1 gap-3 mb-6"></div>
+
+            <!-- Sentence Unscramble Builder Container -->
+            <div id="unscrambleContainer" class="hidden mb-6 space-y-4">
+                <!-- Drop Box Target -->
+                <div id="unscrambleTargetBox" class="min-h-[64px] p-3 border-2 border-dashed border-orange-300 rounded-xl bg-orange-50/50 flex flex-wrap gap-2 items-center text-base font-bold text-idealPurple">
+                    <span class="text-gray-400 text-xs font-normal">Clique nas palavras abaixo para montar a frase...</span>
+                </div>
+                <!-- Source Pool Words -->
+                <div id="unscrambleSourceBox" class="flex flex-wrap gap-2 p-3 bg-gray-50 rounded-xl border border-gray-200"></div>
+                <button id="btnClearSentence" class="text-xs text-rose-600 hover:underline font-bold flex items-center gap-1 mt-1">
+                    <i class="fa-solid fa-rotate-left"></i> Desfazer seleção
+                </button>
+            </div>
+
+            <!-- Justification / Explanation Feedback Box -->
+            <div id="explanationFeedbackBox" class="hidden p-4 rounded-xl border-l-4 mb-6 text-sm"></div>
+
+            <!-- Bottom Control Buttons -->
+            <div class="flex items-center justify-between gap-3 pt-4 border-t border-gray-100">
+                <button id="btnPreviousQuestion" class="btn-hover bg-gray-100 text-gray-700 font-bold px-4 py-2.5 rounded-xl hover:bg-gray-200 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2 text-sm">
+                    <i class="fa-solid fa-chevron-left"></i> Previous
+                </button>
+
+                <div class="flex items-center gap-2">
+                    <button id="btnCheckAnswer" class="btn-hover bg-emerald-500 text-white font-bold px-5 py-2.5 rounded-xl hover:bg-emerald-600 flex items-center gap-2 text-sm shadow">
+                        <i class="fa-solid fa-check"></i> Check
+                    </button>
+
+                    <button id="btnNextQuestion" class="btn-hover bg-idealOrange text-white font-bold px-5 py-2.5 rounded-xl hover:bg-orange-600 flex items-center gap-2 text-sm shadow">
+                        Next <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE 4: RESULTADO E RANKING ================= -->
+        <section id="page4" class="card-container p-6 sm:p-8 hidden my-auto transition-all">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-amber-100 text-amber-500 rounded-full flex items-center justify-center text-3xl mx-auto mb-3 shadow-md">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <h2 class="font-fredoka text-2xl sm:text-3xl font-bold text-idealPurple">Resultado do Quiz</h2>
+                <p id="resultStudentTitle" class="text-gray-600 font-bold text-base mt-1">Parabéns!</p>
+            </div>
+
+            <!-- Score Stats Grid -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+                <div class="bg-emerald-50 border border-emerald-200 p-3.5 rounded-2xl text-center">
+                    <span class="text-xs text-emerald-600 font-bold uppercase block">Acertos</span>
+                    <span id="scoreCorrectCount" class="font-fredoka text-2xl font-bold text-emerald-700">0</span>
+                </div>
+                <div class="bg-rose-50 border border-rose-200 p-3.5 rounded-2xl text-center">
+                    <span class="text-xs text-rose-600 font-bold uppercase block">Erros</span>
+                    <span id="scoreWrongCount" class="font-fredoka text-2xl font-bold text-rose-700">0</span>
+                </div>
+                <div class="bg-blue-50 border border-blue-200 p-3.5 rounded-2xl text-center">
+                    <span class="text-xs text-blue-600 font-bold uppercase block">Porcentagem</span>
+                    <span id="scorePercentCount" class="font-fredoka text-2xl font-bold text-blue-700">0%</span>
+                </div>
+                <div class="bg-purple-50 border border-purple-200 p-3.5 rounded-2xl text-center">
+                    <span class="text-xs text-purple-600 font-bold uppercase block">Tempo Total</span>
+                    <span id="scoreTimeCount" class="font-fredoka text-2xl font-bold text-purple-700">00:00</span>
+                </div>
+            </div>
+
+            <!-- Pedagogical Feedback Card -->
+            <div id="pedagogicalRecommendationCard" class="bg-orange-50 border-l-4 border-idealOrange p-4 rounded-xl mb-8 text-sm text-gray-700 leading-relaxed shadow-sm">
+                <!-- Dynamically generated -->
+            </div>
+
+            <!-- Leaderboard Section -->
+            <div class="border-t pt-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-fredoka text-xl text-idealPurple font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-ranking-star text-amber-500"></i> Ranking TOP 10 da Turma
+                    </h3>
+                    <span class="text-xs text-gray-500 font-semibold">1 Melhor nota por Aluno</span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-gray-700">
+                        <thead class="bg-orange-100 text-idealPurple font-fredoka uppercase text-xs">
+                            <tr>
+                                <th class="p-3 rounded-l-lg">Posição</th>
+                                <th class="p-3">Aluno</th>
+                                <th class="p-3 text-center">Pontuação</th>
+                                <th class="p-3 text-center">Tempo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboardTableBody" class="divide-y divide-gray-100">
+                            <!-- Injected dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Restart Button -->
+            <div class="mt-8 text-center">
+                <button id="btnReturnHome" class="btn-hover bg-idealOrange text-white font-fredoka px-8 py-3.5 rounded-xl shadow-lg hover:bg-orange-600 inline-flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-house"></i> Voltar à Tela Inicial
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Supabase Configuration & Instructions Modal -->
+    <div id="supabaseModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-xl w-full p-6 space-y-4 shadow-2xl border border-orange-200">
+            <div class="flex items-center justify-between border-b pb-3">
+                <h3 class="font-fredoka text-lg font-bold text-idealPurple flex items-center gap-2">
+                    <i class="fa-solid fa-database text-idealOrange"></i> Configuração e SQL Supabase
+                </h3>
+                <button id="btnCloseSupabaseModal" class="text-gray-400 hover:text-gray-700 text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <p class="text-xs text-gray-600">Insira sua URL e Chave Anônima do Supabase abaixo. Caso não preenchido, o app utilizará <strong>localStorage</strong> automaticamente sem falhar.</p>
+
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="font-bold text-gray-700">SUPABASE_URL:</label>
+                    <input id="inputSupabaseUrl" type="text" placeholder="https://xyz.supabase.co" class="w-full p-2.5 border rounded-lg bg-gray-50 text-gray-800 font-mono mt-1 focus:outline-none focus:border-idealOrange">
+                </div>
+                <div>
+                    <label class="font-bold text-gray-700">SUPABASE_KEY (Anon Key):</label>
+                    <input id="inputSupabaseKey" type="text" placeholder="eyJhbGciOiJIUzI1NiI..." class="w-full p-2.5 border rounded-lg bg-gray-50 text-gray-800 font-mono mt-1 focus:outline-none focus:border-idealOrange">
+                </div>
+            </div>
+
+            <!-- SQL Script Box -->
+            <div>
+                <label class="font-bold text-xs text-idealPurple">Script SQL para criar a tabela no Supabase:</label>
+                <pre class="bg-gray-900 text-green-400 p-3 rounded-lg text-xs font-mono overflow-x-auto mt-1 max-h-36">
+create table quiz_results (
+  id bigint generated by default as identity primary key,
+  student_name text not null,
+  score integer not null,
+  total_questions integer not null,
+  completion_time_seconds integer not null,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);</pre>
+            </div>
+
+            <div class="flex justify-end gap-2 pt-2 border-t">
+                <button id="btnSaveSupabaseConfig" class="bg-idealOrange text-white font-bold text-xs px-4 py-2 rounded-lg hover:bg-orange-600">
+                    Salvar e Conectar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="relative z-10 text-center py-4 text-xs text-gray-500">
+        Colégio Ideal © 2026 - Desenvolvido para o 5º Ano Fundamental I
+    </footer>
+
+    <script>
+        // Supabase Client Config Variables
+        let SUPABASE_URL = localStorage.getItem('cfg_supabase_url') || "";
+        let SUPABASE_KEY = localStorage.getItem('cfg_supabase_key') || "";
+        let supabaseClient = null;
+
+        function initSupabase() {
+            if (SUPABASE_URL && SUPABASE_KEY && typeof supabase !== 'undefined') {
+                try {
+                    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                    console.log("Supabase inicializado com sucesso.");
+                } catch(e) {
+                    console.warn("Erro ao iniciar Supabase, operando via LocalStorage:", e);
+                }
+            }
+        }
+        initSupabase();
+
+        // Exact List of Students from Initial Report
+        const STUDENTS_LIST = [
+            { id: "01", name: "ANA CAROLINA SILVA SANTANA", gender: "F" },
+            { id: "02", name: "ARTHUR LIRA SETUBAL", gender: "M" },
+            { id: "03", name: "CAIO ALMEIDA ALVES DA SILVA", gender: "M" },
+            { id: "04", name: "GLADSON MARQUES SANTOS NETO", gender: "M" },
+            { id: "05", name: "GUILHERME EXALTAÇÃO SANTOS", gender: "M" },
+            { id: "06", name: "GUILHERME MONTALVÃO FONSECA DA SILVA", gender: "M" },
+            { id: "07", name: "HEITOR SANTANA ARAUJO", gender: "M" },
+            { id: "08", name: "JOAO PEDRO TELES RIBEIRO", gender: "M" },
+            { id: "09", name: "JOÃO PORTELA MESQUITA CARVALHO", gender: "M" },
+            { id: "10", name: "LEONARDO VELAMES CLEMENTINO", gender: "M" },
+            { id: "11", name: "LUISA KALYNE VIEIRA PASSOS", gender: "F" },
+            { id: "12", name: "MARIA ALICE LIRA SETUBAL", gender: "F" },
+            { id: "13", name: "MARIA JULIA DA COSTA RIBEIRO REINALDO", gender: "F" },
+            { id: "14", name: "MARIANA GUERRA DE LIMA", gender: "F" },
+            { id: "15", name: "MARINA ARQUIMEDES SOARES CHAGAS", gender: "F" },
+            { id: "16", name: "MIGUEL LORENZO DE OLIVEIRA SANTOS", gender: "M" },
+            { id: "17", name: "MIGUEL POLETTI OLIVEIRA", gender: "M" },
+            { id: "18", name: "PAULO RICARDO JULIÃO MACEDO FERNANDES", gender: "M" },
+            { id: "19", name: "PEDRO GALDINO CAVALCANTE", gender: "M" },
+            { id: "20", name: "VICTOR HUGO RIBEIRO ALMEIDA", gender: "M" }
+        ];
+
+        const QUIZ_QUESTIONS = [
+            // Q1 to Q5: Choice between 'is' or 'are'
+            { id: 1, type: "choice2", topic: "There is / There are", title: "______ a dog under the tree.", subtitle: "Escolha a forma correta para o singular.", options: ["There is", "There are"], correct: "There is", explanation: "Usamos 'There is' pois temos apenas um cachorro ('a dog')." },
+            { id: 2, type: "choice2", topic: "There is / There are", title: "______ four books on the desk.", subtitle: "Escolha a forma correta para o plural.", options: ["There is", "There are"], correct: "There are", explanation: "Usamos 'There are' pois se refere a quatro livros ('four books')." },
+            { id: 3, type: "choice2", topic: "There is / There are", title: "______ many students in the park.", subtitle: "Escolha a opção correta.", options: ["There is", "There are"], correct: "There are", explanation: "Usamos 'There are' para o plural 'many students'." },
+            { id: 4, type: "choice2", topic: "There is / There are", title: "______ a new bicycle in front of the house.", subtitle: "Escolha a opção correta.", options: ["There is", "There are"], correct: "There is", explanation: "Usamos 'There is' para apenas um objeto singular." },
+            { id: 5, type: "choice2", topic: "There is / There are", title: "______ two apples on the plate.", subtitle: "Escolha a opção correta.", options: ["There is", "There are"], correct: "There are", explanation: "Usamos 'There are' para o plural 'two apples'." },
+
+            // Q6 to Q10: Convert Singular to Plural (4 Options)
+            { id: 6, type: "choice4", topic: "Plural Conversion", title: "Qual é a versão no PLURAL de: 'There is a cat in the yard'?", subtitle: "Escolha a frase no plural correta.", options: ["There are cats in the yard.", "There is cats in the yard.", "There are a cat in the yard.", "There is a cats in the yard."], correct: "There are cats in the yard.", explanation: "No plural, 'There is' vira 'There are', o artigo 'a' desaparece e 'cat' ganha o 's'." },
+            { id: 7, type: "choice4", topic: "Plural Conversion", title: "Qual é a versão no PLURAL de: 'There is a pen in the box'?", subtitle: "Escolha a opção correta.", options: ["There is pens in the box.", "There are pens in the box.", "There are a pen in the box.", "There is two pen in the box."], correct: "There are pens in the box.", explanation: "Transformamos em 'There are pens' retirando o artigo singular 'a'." },
+            { id: 8, type: "choice4", topic: "Plural Conversion", title: "Qual é a versão no PLURAL de: 'There is a teacher in the classroom'?", subtitle: "Escolha a opção correta.", options: ["There are teachers in the classroom.", "There is teachers in the classroom.", "There are a teachers in the classroom.", "There is teacher in the classroom."], correct: "There are teachers in the classroom.", explanation: "'There is a teacher' vira 'There are teachers' no plural." },
+            { id: 9, type: "choice4", topic: "Plural Conversion", title: "Qual é a versão no PLURAL de: 'There is a car in the street'?", subtitle: "Escolha a opção correta.", options: ["There is cars in the street.", "There are a cars in the street.", "There are cars in the street.", "There is two car in the street."], correct: "There are cars in the street.", explanation: "'There are' é usado junto ao substantivo plural 'cars'." },
+            { id: 10, type: "choice4", topic: "Plural Conversion", title: "Qual é a versão no PLURAL de: 'There is a bird in the tree'?", subtitle: "Escolha a opção correta.", options: ["There are birds in the tree.", "There is birds in the tree.", "There are a bird in the tree.", "There is bird in the tree."], correct: "There are birds in the tree.", explanation: "Usamos 'There are' e pluralizamos o substantivo para 'birds'." },
+
+            // Q11 to Q15: Sentence Unscramble (There is / There are)
+            { id: 11, type: "unscramble", topic: "Sentence Building", title: "Monte a frase ordenando as palavras:", subtitle: "Clique nos botões de palavras para montar.", words: ["There", "is", "a", "blue", "car", "here"], correct: "There is a blue car here" },
+            { id: 12, type: "unscramble", topic: "Sentence Building", title: "Monte a frase ordenando as palavras:", subtitle: "Clique nos botões de palavras para montar.", words: ["There", "are", "three", "cats", "on", "the", "roof"], correct: "There are three cats on the roof" },
+            { id: 13, type: "unscramble", topic: "Sentence Building", title: "Monte a frase ordenando as palavras:", subtitle: "Clique nos botões de palavras para montar.", words: ["Is", "there", "a", "pen", "in", "your", "bag"], correct: "Is there a pen in your bag" },
+            { id: 14, type: "unscramble", topic: "Sentence Building", title: "Monte a frase ordenando as palavras:", subtitle: "Clique nos botões de palavras para montar.", words: ["There", "are", "many", "flowers", "in", "the", "garden"], correct: "There are many flowers in the garden" },
+            { id: 15, type: "unscramble", topic: "Sentence Building", title: "Monte a frase ordenando as palavras:", subtitle: "Clique nos botões de palavras para montar.", words: ["There", "is", "no", "milk", "in", "the", "fridge"], correct: "There is no milk in the fridge" },
+
+            // Q16 to Q25: Simple Present Verb Forms (Varied Pronouns)
+            { id: 16, type: "choice4", topic: "Simple Present", title: "She ______ (play) video games after school.", subtitle: "Escolha a forma verbal correta para SHE.", options: ["plays", "play", "playing", "playses"], correct: "plays", explanation: "Para She/He/It na afirmativa do Simple Present, acrescentamos '-s' ao verbo: 'plays'." },
+            { id: 17, type: "choice4", topic: "Simple Present", title: "They ______ (live) in a big house.", subtitle: "Escolha a forma verbal para THEY.", options: ["lives", "live", "living", "is live"], correct: "live", explanation: "Com o pronome 'They', o verbo não sofre alterações: 'live'." },
+            { id: 18, type: "choice4", topic: "Simple Present", title: "He ______ (watch) cartoons every morning.", subtitle: "Escolha a forma verbal para HE.", options: ["watch", "watches", "watching", "watchs"], correct: "watches", explanation: "Verbos terminados em -ch ganham '-es' quando acompanham He: 'watches'." },
+            { id: 19, type: "choice4", topic: "Simple Present", title: "We ______ (not / like) cold weather.", subtitle: "Escolha a forma negativa correta para WE.", options: ["doesn't like", "don't like", "not like", "no like"], correct: "don't like", explanation: "Para a negativa com o pronome 'We', usamos o auxiliar 'don't'." },
+            { id: 20, type: "choice4", topic: "Simple Present", title: "______ (he / study) English on Mondays?", subtitle: "Escolha a forma interrogativa para HE.", options: ["Do he study", "Does he study", "Is he study", "Does he studies"], correct: "Does he study", explanation: "Perguntas com HE usam o auxiliar 'Does', e o verbo principal volta ao normal sem 's'." },
+            { id: 21, type: "choice4", topic: "Simple Present", title: "My brother ______ (study) for his exam.", subtitle: "Escolha a forma correta para MY BROTHER (HE).", options: ["studys", "studies", "study", "studying"], correct: "studies", explanation: "Verbos terminados em consoante + Y trocam o Y por '-ies' com HE: 'studies'." },
+            { id: 22, type: "choice4", topic: "Simple Present", title: "I ______ (go) to school by bus.", subtitle: "Escolha a forma verbal para I.", options: ["goes", "go", "going", "gos"], correct: "go", explanation: "Com o pronome 'I', o verbo não ganha 's': mantemos 'go'." },
+            { id: 23, type: "choice4", topic: "Simple Present", title: "It ______ (rain) a lot in November.", subtitle: "Escolha a forma verbal para IT.", options: ["rains", "rain", "rainy", "raining"], correct: "rains", explanation: "Para o pronome IT na afirmativa, acrescentamos '-s': 'rains'." },
+            { id: 24, type: "choice4", topic: "Simple Present", title: "Mary ______ (not / eat) fast food.", subtitle: "Escolha a forma negativa para MARY (SHE).", options: ["don't eat", "doesn't eat", "doesn't eats", "not eats"], correct: "doesn't eat", explanation: "Usamos 'doesn't' para negação de She (Mary), mantendo o verbo sem o 's'." },
+            { id: 25, type: "choice4", topic: "Simple Present", title: "______ (you / know) the answer?", subtitle: "Escolha a forma interrogativa para YOU.", options: ["Does you know", "Do you know", "Are you know", "Do you knows"], correct: "Do you know", explanation: "Perguntas com o pronome YOU usam o auxiliar 'Do'." },
+
+            // Q26 to Q30: Unscramble Frequency Adverbs (Subject + Adverb + Verb...)
+            { id: 26, type: "unscramble", topic: "Frequency Adverbs", title: "Desembaralhe posicionado o advérbio corretamente:", subtitle: "Lembre-se: Sujeito + Advérbio + Verbo...", words: ["She", "always", "eats", "apples", "in", "the", "morning"], correct: "She always eats apples in the morning" },
+            { id: 27, type: "unscramble", topic: "Frequency Adverbs", title: "Desembaralhe posicionado o advérbio corretamente:", subtitle: "Lembre-se: Sujeito + Advérbio + Verbo...", words: ["They", "never", "go", "to", "bed", "late"], correct: "They never go to bed late" },
+            { id: 28, type: "unscramble", topic: "Frequency Adverbs", title: "Desembaralhe posicionado o advérbio corretamente:", subtitle: "Lembre-se: Sujeito + Advérbio + Verbo...", words: ["I", "usually", "play", "soccer", "on", "Saturdays"], correct: "I usually play soccer on Saturdays" },
+            { id: 29, type: "unscramble", topic: "Frequency Adverbs", title: "Desembaralhe posicionado o advérbio corretamente:", subtitle: "Lembre-se: Sujeito + Advérbio + Verbo...", words: ["He", "sometimes", "watches", "movies", "at", "night"], correct: "He sometimes watches movies at night" },
+            { id: 30, type: "unscramble", topic: "Frequency Adverbs", title: "Desembaralhe posicionado o advérbio corretamente:", subtitle: "Lembre-se: Sujeito + Advérbio + Verbo...", words: ["We", "often", "visit", "our", "grandparents"], correct: "We often visit our grandparents" }
+        ];
+
+        let activeStudent = null;
+        let currentQIndex = 0;
+        let userSelectedAnswers = {};
+        let checkedQuestionsMap = {};
+        let timerInterval = null;
+        let secondsElapsed = 0;
+
+        // Element references
+        const page1 = document.getElementById('page1');
+        const page2 = document.getElementById('page2');
+        const page3 = document.getElementById('page3');
+        const page4 = document.getElementById('page4');
+        const studentSelect = document.getElementById('studentSelect');
+        const attemptNotice = document.getElementById('attemptNotice');
+        const btnStartQuiz = document.getElementById('btnStartQuiz');
+        const bgElementsContainer = document.getElementById('bgElementsContainer');
+
+        window.addEventListener('DOMContentLoaded', () => {
+            populateStudentDropdown();
+            setupEvents();
+        });
+
+        function populateStudentDropdown() {
+            STUDENTS_LIST.forEach(st => {
+                const opt = document.createElement('option');
+                opt.value = st.id;
+                opt.textContent = `${st.id} - ${st.name}`;
+                studentSelect.appendChild(opt);
+            });
+        }
+
+        function setupEvents() {
+            document.getElementById('btnLogin').addEventListener('click', () => showPage(page2));
+
+            studentSelect.addEventListener('change', async (e) => {
+                const sid = e.target.value;
+                if (!sid) {
+                    activeStudent = null;
+                    btnStartQuiz.disabled = true;
+                    btnStartQuiz.className = "btn-hover w-full bg-gray-300 text-gray-500 font-fredoka text-lg py-3.5 rounded-xl shadow cursor-not-allowed flex items-center justify-center gap-2";
+                    attemptNotice.classList.add('hidden');
+                    updateBackgroundTheme(null);
+                    return;
+                }
+
+                activeStudent = STUDENTS_LIST.find(s => s.id === sid);
+                updateBackgroundTheme(activeStudent.gender);
+                await verifyAttemptsAndToggleUI(activeStudent);
+            });
+
+            btnStartQuiz.addEventListener('click', () => {
+                if (activeStudent) startQuizSession();
+            });
+
+            document.getElementById('btnPreviousQuestion').addEventListener('click', () => {
+                if (currentQIndex > 0) { currentQIndex--; renderQuestion(); }
+            });
+
+            document.getElementById('btnNextQuestion').addEventListener('click', () => {
+                if (currentQIndex < QUIZ_QUESTIONS.length - 1) {
+                    currentQIndex++;
+                    renderQuestion();
+                } else {
+                    completeQuiz();
+                }
+            });
+
+            document.getElementById('btnCheckAnswer').addEventListener('click', checkCurrentQuestion);
+            document.getElementById('btnClearSentence').addEventListener('click', clearSentenceBuilder);
+
+            document.getElementById('btnReturnHome').addEventListener('click', () => {
+                showPage(page1);
+                updateBackgroundTheme(null);
+                studentSelect.value = "";
+                btnStartQuiz.disabled = true;
+                attemptNotice.classList.add('hidden');
+            });
+
+            // Supabase modal handlers
+            document.getElementById('btnOpenSupabaseModal').addEventListener('click', () => {
+                document.getElementById('inputSupabaseUrl').value = SUPABASE_URL;
+                document.getElementById('inputSupabaseKey').value = SUPABASE_KEY;
+                document.getElementById('supabaseModal').classList.remove('hidden');
+            });
+
+            document.getElementById('btnCloseSupabaseModal').addEventListener('click', () => {
+                document.getElementById('supabaseModal').classList.add('hidden');
+            });
+
+            document.getElementById('btnSaveSupabaseConfig').addEventListener('click', () => {
+                SUPABASE_URL = document.getElementById('inputSupabaseUrl').value.trim();
+                SUPABASE_KEY = document.getElementById('inputSupabaseKey').value.trim();
+                localStorage.setItem('cfg_supabase_url', SUPABASE_URL);
+                localStorage.setItem('cfg_supabase_key', SUPABASE_KEY);
+                initSupabase();
+                document.getElementById('supabaseModal').classList.add('hidden');
+                alert("Configurações do Supabase salvas!");
+            });
+        }
+
+        function showPage(targetPage) {
+            [page1, page2, page3, page4].forEach(p => p.classList.add('hidden'));
+            targetPage.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateBackgroundTheme(gender) {
+            bgElementsContainer.innerHTML = '';
+            if (gender === 'M') {
+                document.body.style.backgroundColor = '#E0F2FE'; // Light Blue
+                const icons = ['🚀', '⚡', '⚽', '🚀', '⚽', '⚡'];
+                icons.forEach((ic, i) => {
+                    const el = document.createElement('div');
+                    el.className = 'floating-element text-4xl';
+                    el.style.left = `${(i * 16) + 6}%`;
+                    el.style.top = `${(i * 15) + 8}%`;
+                    el.style.animationDelay = `${i * 0.5}s`;
+                    el.textContent = ic;
+                    bgElementsContainer.appendChild(el);
+                });
+            } else if (gender === 'F') {
+                document.body.style.backgroundColor = '#FCE7F3'; // Light Pink
+                const icons = ['🦄', '🍦', '🌸', '🦄', '🌸', '🍦'];
+                icons.forEach((ic, i) => {
+                    const el = document.createElement('div');
+                    el.className = 'floating-element text-4xl';
+                    el.style.left = `${(i * 16) + 6}%`;
+                    el.style.top = `${(i * 15) + 8}%`;
+                    el.style.animationDelay = `${i * 0.5}s`;
+                    el.textContent = ic;
+                    bgElementsContainer.appendChild(el);
+                });
+            } else {
+                document.body.style.backgroundColor = '#FFF2EC'; // Default light orange
+            }
+        }
+
+        // Check attempts in Supabase with LocalStorage fallback
+        async function fetchStudentAttemptsCount(studentName) {
+            let count = 0;
+
+            if (supabaseClient) {
+                try {
+                    const { data, error } = await supabaseClient
+                        .from('quiz_results')
+                        .select('id')
+                        .eq('student_name', studentName);
+                    if (!error && data) return data.length;
+                } catch(e) {
+                    console.log("Falha na consulta ao Supabase, buscando localmente.");
+                }
+            }
+
+            // Fallback to local storage
+            const localHist = JSON.parse(localStorage.getItem(`attempts_${studentName}`) || '[]');
+            return localHist.length;
+        }
+
+        async function verifyAttemptsAndToggleUI(student) {
+            attemptNotice.classList.remove('hidden');
+            const attemptsCount = await fetchStudentAttemptsCount(student.name);
+
+            if (attemptsCount >= 3) {
+                attemptNotice.className = "p-4 rounded-xl border border-rose-300 bg-rose-50 text-rose-700 text-sm font-bold text-center";
+                attemptNotice.innerHTML = `<i class="fa-solid fa-ban text-lg block mb-1"></i> Você já realizou este quiz 3 vezes. Não é possível tentar uma 4ª vez.`;
+                btnStartQuiz.disabled = true;
+                btnStartQuiz.className = "btn-hover w-full bg-gray-300 text-gray-500 font-fredoka text-lg py-3.5 rounded-xl shadow cursor-not-allowed flex items-center justify-center gap-2";
+            } else {
+                attemptNotice.className = "p-3 rounded-xl border border-emerald-300 bg-emerald-50 text-emerald-800 text-xs font-semibold text-center";
+                attemptNotice.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> Você possui ${3 - attemptsCount} tentativa(s) restante(s) de 3.`;
+                btnStartQuiz.disabled = false;
+                btnStartQuiz.className = "btn-hover w-full bg-idealOrange text-white font-fredoka text-lg py-3.5 rounded-xl shadow-lg hover:bg-orange-600 flex items-center justify-center gap-2 cursor-pointer";
+            }
+        }
+
+        async function startQuizSession() {
+            currentQIndex = 0;
+            userSelectedAnswers = {};
+            checkedQuestionsMap = {};
+            secondsElapsed = 0;
+
+            document.getElementById('activeStudentName').textContent = activeStudent.name;
+            const currentAttempts = await fetchStudentAttemptsCount(activeStudent.name);
+            document.getElementById('activeAttemptCount').textContent = `Tentativa ${currentAttempts + 1}/3`;
+
+            startTimer();
+            showPage(page3);
+            renderQuestion();
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            const timerEl = document.getElementById('quizTimerDisplay');
+            timerInterval = setInterval(() => {
+                secondsElapsed++;
+                const mins = Math.floor(secondsElapsed / 60).toString().padStart(2, '0');
+                const secs = (secondsElapsed % 60).toString().padStart(2, '0');
+                timerEl.textContent = `${mins}:${secs}`;
+            }, 1000);
+        }
+
+        function renderQuestion() {
+            const q = QUIZ_QUESTIONS[currentQIndex];
+
+            document.getElementById('questionCounterBadge').textContent = `Questão ${currentQIndex + 1} de ${QUIZ_QUESTIONS.length}`;
+            document.getElementById('questionTopicBadge').textContent = `Tópico: ${q.topic}`;
+            document.getElementById('quizProgressBar').style.width = `${((currentQIndex + 1) / QUIZ_QUESTIONS.length) * 100}%`;
+
+            document.getElementById('questionTitleText').textContent = q.title;
+            const sub = document.getElementById('questionSubtitleText');
+            if (q.subtitle) {
+                sub.textContent = q.subtitle;
+                sub.classList.remove('hidden');
+            } else {
+                sub.classList.add('hidden');
+            }
+
+            document.getElementById('explanationFeedbackBox').classList.add('hidden');
+
+            const choiceBox = document.getElementById('choiceOptionsContainer');
+            const unscrambleBox = document.getElementById('unscrambleContainer');
+
+            if (q.type === 'choice2' || q.type === 'choice4') {
+                unscrambleBox.classList.add('hidden');
+                choiceBox.classList.remove('hidden');
+                choiceBox.innerHTML = '';
+
+                q.options.forEach((opt) => {
+                    const btn = document.createElement('button');
+                    const isSelected = userSelectedAnswers[q.id] === opt;
+
+                    btn.className = `w-full text-left p-4 rounded-xl border-2 font-bold text-sm transition-all flex items-center justify-between ${
+                        isSelected ? 'border-idealOrange bg-orange-50 text-idealOrange shadow-sm' : 'border-gray-200 bg-white text-gray-700 hover:border-orange-300'
+                    }`;
+
+                    btn.innerHTML = `<span>${opt}</span> <i class="fa-regular ${isSelected ? 'fa-circle-dot text-idealOrange' : 'fa-circle text-gray-300'}"></i>`;
+
+                    btn.addEventListener('click', () => {
+                        if (checkedQuestionsMap[q.id]) return;
+                        userSelectedAnswers[q.id] = opt;
+                        renderQuestion();
+                    });
+
+                    choiceBox.appendChild(btn);
+                });
+
+            } else if (q.type === 'unscramble') {
+                choiceBox.classList.add('hidden');
+                unscrambleBox.classList.remove('hidden');
+                renderUnscrambleWords(q);
+            }
+
+            document.getElementById('btnPreviousQuestion').disabled = (currentQIndex === 0);
+
+            if (checkedQuestionsMap[q.id]) {
+                displayQuestionFeedback(q);
+            }
+        }
+
+        function renderUnscrambleWords(q) {
+            const target = document.getElementById('unscrambleTargetBox');
+            const source = document.getElementById('unscrambleSourceBox');
+
+            const selectedWords = userSelectedAnswers[q.id] || [];
+            target.innerHTML = '';
+
+            if (selectedWords.length === 0) {
+                target.innerHTML = `<span class="text-gray-400 text-xs font-normal">Clique nas palavras abaixo para montar a frase...</span>`;
+            } else {
+                selectedWords.forEach((word, index) => {
+                    const chip = document.createElement('span');
+                    chip.className = "word-btn bg-idealOrange text-white px-3 py-1.5 rounded-lg text-sm font-bold shadow-sm inline-flex items-center gap-1.5";
+                    chip.innerHTML = `${word} <i class="fa-solid fa-xmark text-xs opacity-80"></i>`;
+                    chip.addEventListener('click', () => {
+                        if (checkedQuestionsMap[q.id]) return;
+                        selectedWords.splice(index, 1);
+                        userSelectedAnswers[q.id] = selectedWords;
+                        renderUnscrambleWords(q);
+                    });
+                    target.appendChild(chip);
+                });
+            }
+
+            source.innerHTML = '';
+            let remainingWords = [...q.words];
+            selectedWords.forEach(w => {
+                const idx = remainingWords.indexOf(w);
+                if (idx > -1) remainingWords.splice(idx, 1);
+            });
+
+            remainingWords.forEach((w) => {
+                const btn = document.createElement('button');
+                btn.className = "word-btn bg-white border border-gray-300 text-gray-800 hover:border-idealOrange px-3 py-1.5 rounded-lg text-sm font-semibold shadow-sm";
+                btn.textContent = w;
+                btn.addEventListener('click', () => {
+                    if (checkedQuestionsMap[q.id]) return;
+                    if (!userSelectedAnswers[q.id]) userSelectedAnswers[q.id] = [];
+                    userSelectedAnswers[q.id].push(w);
+                    renderUnscrambleWords(q);
+                });
+                source.appendChild(btn);
+            });
+        }
+
+        function clearSentenceBuilder() {
+            const q = QUIZ_QUESTIONS[currentQIndex];
+            if (checkedQuestionsMap[q.id]) return;
+            userSelectedAnswers[q.id] = [];
+            renderUnscrambleWords(q);
+        }
+
+        function checkCurrentQuestion() {
+            const q = QUIZ_QUESTIONS[currentQIndex];
+            checkedQuestionsMap[q.id] = true;
+            displayQuestionFeedback(q);
+        }
+
+        function displayQuestionFeedback(q) {
+            const box = document.getElementById('explanationFeedbackBox');
+            box.classList.remove('hidden');
+
+            let isCorrect = false;
+
+            if (q.type === 'choice2' || q.type === 'choice4') {
+                isCorrect = (userSelectedAnswers[q.id] === q.correct);
+            } else if (q.type === 'unscramble') {
+                const formattedAns = (userSelectedAnswers[q.id] || []).join(' ').trim().toLowerCase();
+                isCorrect = (formattedAns === q.correct.trim().toLowerCase());
+            }
+
+            if (isCorrect) {
+                box.className = "p-4 rounded-xl border-l-4 border-emerald-500 bg-emerald-50 text-emerald-800 text-sm mb-6";
+                box.innerHTML = `<div class="font-bold flex items-center gap-2"><i class="fa-solid fa-circle-check text-lg"></i> Parabéns! Resposta Correta.</div>`;
+            } else {
+                box.className = "p-4 rounded-xl border-l-4 border-rose-500 bg-rose-50 text-rose-800 text-sm mb-6 space-y-1";
+                box.innerHTML = `
+                    <div class="font-bold flex items-center gap-2"><i class="fa-solid fa-circle-xmark text-lg"></i> Resposta Incorreta.</div>
+                    <div><strong>Resposta correta:</strong> <span class="text-emerald-700 font-bold">${q.correct}</span></div>
+                    <div class="text-xs text-gray-600 mt-1"><strong>Justificativa:</strong> ${q.explanation || 'Atente-se às regras de gramática do 5º ano.'}</div>
+                `;
+            }
+        }
+
+        async function completeQuiz() {
+            clearInterval(timerInterval);
+
+            let correct = 0;
+            let wrong = 0;
+            let errorTopicTracker = {};
+
+            QUIZ_QUESTIONS.forEach(q => {
+                let ok = false;
+                if (q.type === 'choice2' || q.type === 'choice4') {
+                    ok = (userSelectedAnswers[q.id] === q.correct);
+                } else if (q.type === 'unscramble') {
+                    const ans = (userSelectedAnswers[q.id] || []).join(' ').trim().toLowerCase();
+                    ok = (ans === q.correct.trim().toLowerCase());
+                }
+
+                if (ok) {
+                    correct++;
+                } else {
+                    wrong++;
+                    errorTopicTracker[q.topic] = (errorTopicTracker[q.topic] || 0) + 1;
+                }
+            });
+
+            const total = QUIZ_QUESTIONS.length;
+            const percent = Math.round((correct / total) * 100);
+            const formattedTime = document.getElementById('quizTimerDisplay').textContent;
+
+            document.getElementById('scoreCorrectCount').textContent = correct;
+            document.getElementById('scoreWrongCount').textContent = wrong;
+            document.getElementById('scorePercentCount').textContent = `${percent}%`;
+            document.getElementById('scoreTimeCount').textContent = formattedTime;
+            document.getElementById('resultStudentTitle').textContent = `${activeStudent.name} - 5º Ano`;
+
+            // Pedagogical feedback
+            const recCard = document.getElementById('pedagogicalRecommendationCard');
+            let weakestTopic = "";
+            let maxErrors = -1;
+
+            for (const top in errorTopicTracker) {
+                if (errorTopicTracker[top] > maxErrors) {
+                    maxErrors = errorTopicTracker[top];
+                    weakestTopic = top;
+                }
+            }
+
+            if (percent === 100) {
+                recCard.className = "bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-xl mb-8 text-sm text-emerald-900";
+                recCard.innerHTML = `<strong>🌟 Excelente!</strong> Você gabaritou a atividade e dominou todo o conteúdo com precisão!`;
+            } else {
+                recCard.className = "bg-orange-50 border-l-4 border-idealOrange p-4 rounded-xl mb-8 text-sm text-gray-700";
+                recCard.innerHTML = `
+                    <h4 class="font-bold text-idealOrange mb-1 flex items-center gap-2">
+                        <i class="fa-solid fa-bullseye"></i> Diagnóstico Pedagógico Individual:
+                    </h4>
+                    <p>Você acertou <strong>${correct}</strong> de <strong>30</strong> questões (${percent}%). Recomendamos dedicar mais atenção ao tópico de <strong class="text-idealPurple">${weakestTopic || 'Revisão Geral'}</strong> para fixar o conteúdo.</p>
+                `;
+            }
+
+            // Save Attempt to Supabase and LocalStorage
+            await saveAttemptResult(activeStudent.name, correct, total, secondsElapsed);
+
+            // Fetch and Render TOP 10 Leaderboard
+            await fetchAndRenderLeaderboard();
+
+            showPage(page4);
+        }
+
+        async function saveAttemptResult(studentName, score, total, timeSecs) {
+            const payload = {
+                student_name: studentName,
+                score: score,
+                total_questions: total,
+                completion_time_seconds: timeSecs
+            };
+
+            // LocalStorage history per student
+            const studentKey = `attempts_${studentName}`;
+            const studentAttempts = JSON.parse(localStorage.getItem(studentKey) || '[]');
+            studentAttempts.push(payload);
+            localStorage.setItem(studentKey, JSON.stringify(studentAttempts));
+
+            // LocalStorage global
+            const globalRecords = JSON.parse(localStorage.getItem('quiz_global_results') || '[]');
+            globalRecords.push(payload);
+            localStorage.setItem('quiz_global_results', JSON.stringify(globalRecords));
+
+            // Save in Supabase if online
+            if (supabaseClient) {
+                try {
+                    await supabaseClient.from('quiz_results').insert([payload]);
+                    console.log("Resultado salvo com sucesso no Supabase!");
+                } catch (e) {
+                    console.warn("Falha ao salvar no Supabase, mantido em LocalStorage:", e);
+                }
+            }
+        }
+
+        async function fetchAndRenderLeaderboard() {
+            const tbody = document.getElementById('leaderboardTableBody');
+            tbody.innerHTML = '';
+
+            let allResults = [];
+
+            if (supabaseClient) {
+                try {
+                    const { data, error } = await supabaseClient
+                        .from('quiz_results')
+                        .select('student_name, score, completion_time_seconds');
+                    if (!error && data && data.length > 0) {
+                        allResults = data;
+                    }
+                } catch(e) {
+                    console.log("Falha ao consultar ranking Supabase, usando LocalStorage.");
+                }
+            }
+
+            if (allResults.length === 0) {
+                allResults = JSON.parse(localStorage.getItem('quiz_global_results') || '[]');
+            }
+
+            // Group by Student Name: Keep Best Score & Lowest Time
+            const bestByStudent = {};
+
+            allResults.forEach(r => {
+                const name = r.student_name;
+                if (!bestByStudent[name]) {
+                    bestByStudent[name] = r;
+                } else {
+                    const currentBest = bestByStudent[name];
+                    if (r.score > currentBest.score) {
+                        bestByStudent[name] = r;
+                    } else if (r.score === currentBest.score) {
+                        if (r.completion_time_seconds < currentBest.completion_time_seconds) {
+                            bestByStudent[name] = r;
+                        }
+                    }
+                }
+            });
+
+            // Sort TOP 10
+            const sortedTop10 = Object.values(bestByStudent).sort((a, b) => {
+                if (b.score !== a.score) return b.score - a.score;
+                return a.completion_time_seconds - b.completion_time_seconds;
+            }).slice(0, 10);
+
+            if (sortedTop10.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-gray-400">Nenhum resultado registrado ainda.</td></tr>`;
+                return;
+            }
+
+            sortedTop10.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-orange-50/50 transition-colors";
+
+                let medal = `${index + 1}º`;
+                if (index === 0) medal = `🥇 1º`;
+                if (index === 1) medal = `🥈 2º`;
+                if (index === 2) medal = `🥉 3º`;
+
+                const mins = Math.floor(item.completion_time_seconds / 60).toString().padStart(2, '0');
+                const secs = (item.completion_time_seconds % 60).toString().padStart(2, '0');
+
+                tr.innerHTML = `
+                    <td class="p-3 font-bold text-idealOrange">${medal}</td>
+                    <td class="p-3 font-bold text-idealPurple">${item.student_name}</td>
+                    <td class="p-3 text-center font-bold text-emerald-600">${item.score} / 30</td>
+                    <td class="p-3 text-center font-mono text-xs text-gray-600">${mins}:${secs}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+    </script>
+</body>
+</html>
