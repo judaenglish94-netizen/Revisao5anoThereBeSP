@@ -11,7 +11,7 @@
   <style>
     :root {
       --primary-orange: #F15A24;
-      --bg-orange-light: #FFF2EB; /* Laranja suave de fundo */
+      --bg-orange-light: #FFF2EB;
       --dark-purple: #2B1842;
       --card-white: #FFFFFF;
       --boy-bg: #E3F2FD;
@@ -41,7 +41,6 @@
       overflow-x: hidden;
     }
 
-    /* Elementos Flutuantes de Fundo */
     .bg-floaters {
       position: fixed;
       top: 0;
@@ -66,7 +65,6 @@
       100% { transform: translateY(-10vh) rotate(360deg); }
     }
 
-    /* Top Logo & Header (Estilo Identico a Imagem) */
     .app-header {
       display: flex;
       flex-direction: column;
@@ -105,7 +103,6 @@
       font-weight: 500;
     }
 
-    /* Container dos Cards da Aplicação */
     .container {
       width: 100%;
       max-width: 650px;
@@ -131,7 +128,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Scrollbox para o Resumo da Pagina 1 */
     .summary-scrollbox {
       max-height: 380px;
       overflow-y: auto;
@@ -187,7 +183,6 @@
       font-size: 0.9rem;
     }
 
-    /* Botões Arredondados e Estilizados */
     .btn {
       background-color: var(--primary-orange);
       color: white;
@@ -219,7 +214,6 @@
       transform: none;
     }
 
-    /* Badge da Professora */
     .teacher-badge {
       display: flex;
       align-items: center;
@@ -247,7 +241,6 @@
       font-size: 0.95rem;
     }
 
-    /* Select Box Estilo Imagem */
     .select-box {
       width: 100%;
       padding: 14px 18px;
@@ -268,7 +261,6 @@
       background: #FFFFFF;
     }
 
-    /* Quiz Bar & Timer */
     .quiz-header {
       display: flex;
       justify-content: space-between;
@@ -295,7 +287,6 @@
       color: var(--primary-orange);
     }
 
-    /* Questões */
     .question-title {
       font-size: 1.15rem;
       font-weight: 700;
@@ -333,7 +324,6 @@
       font-weight: 700;
     }
 
-    /* Area Unscramble */
     .unscramble-target {
       min-height: 55px;
       border: 2px dashed var(--primary-orange);
@@ -418,7 +408,6 @@
       cursor: pointer;
     }
 
-    /* Leaderboard */
     .ranking-table {
       width: 100%;
       border-collapse: collapse;
@@ -442,7 +431,6 @@
       background-color: #F9F9FB;
     }
 
-    /* Modal */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -465,10 +453,8 @@
 </head>
 <body>
 
-  <!-- Elementos Flutuantes Dinâmicos -->
   <div class="bg-floaters" id="bgFloaters"></div>
 
-  <!-- Header Estilizado idêntico à imagem -->
   <div class="app-header">
     <div class="logo-card">
       <img src="images.png" alt="Colégio Ideal" class="logo-img">
@@ -523,7 +509,7 @@
         <div class="example">Exemplo: I <strong>always</strong> eat breakfast. (Eu sempre tomo café da manhã.)</div>
       </div>
 
-      <button class="btn" onclick="goToPage(2)">Login</button>
+      <button class="btn" type="button" onclick="goToPage(2)">Login</button>
     </div>
 
     <!-- PÁGINA 2: IDENTIFICAÇÃO DO ALUNO -->
@@ -563,7 +549,7 @@
 
       <div id="attemptInfo" style="text-align: center; margin: 10px 0; font-weight: 600; color: var(--dark-purple); font-size: 0.9rem;"></div>
 
-      <button id="btnStartQuiz" class="btn" onclick="startQuiz()" disabled>Start quiz</button>
+      <button id="btnStartQuiz" class="btn" type="button" onclick="startQuiz()" disabled>Start quiz</button>
     </div>
 
     <!-- PÁGINA 3: APLICAÇÃO DO QUIZ -->
@@ -580,9 +566,9 @@
       <div class="feedback-box" id="feedbackBox"></div>
 
       <div class="quiz-nav-btns">
-        <button class="btn-nav" id="btnPrev" onclick="prevQuestion()">Previous</button>
-        <button class="btn-check" id="btnCheck" onclick="checkAnswer()">Check</button>
-        <button class="btn-nav" id="btnNext" onclick="nextQuestion()">Next</button>
+        <button class="btn-nav" id="btnPrev" type="button" onclick="prevQuestion()">Previous</button>
+        <button class="btn-check" id="btnCheck" type="button" onclick="checkAnswer()">Check</button>
+        <button class="btn-nav" id="btnNext" type="button" onclick="nextQuestion()">Next</button>
       </div>
     </div>
 
@@ -606,31 +592,33 @@
         <tbody id="rankingBody"></tbody>
       </table>
 
-      <button class="btn" onclick="resetToLogin()">Voltar ao Início</button>
+      <button class="btn" type="button" onclick="resetToLogin()">Voltar ao Início</button>
     </div>
 
   </div>
 
-  <!-- Modal -->
   <div class="modal-overlay" id="modalAlert">
     <div class="modal-card">
       <h3 style="color: var(--error-red); margin-bottom: 10px;">Limite Atingido</h3>
-      <p id="modalMsg">Você já realizou esta atividade 3 vezes. Não é possível fazer novas tentativas.</p>
-      <button class="btn" style="margin-top: 15px;" onclick="closeModal()">Entender</button>
+      <p id="modalMsg">Você já realizou esta atividade 3 vezes. Não é possible fazer novas tentativas.</p>
+      <button class="btn" type="button" style="margin-top: 15px;" onclick="closeModal()">Entender</button>
     </div>
   </div>
 
   <script>
-    // CREDENCIAIS SUPABASE
-    const SUPABASE_URL = 'https://sua-url-do-supabase.supabase.co'; 
-    const SUPABASE_KEY = 'sua-chave-anon-key-aqui';
+    // CREDENCIAIS SUPABASE (Substitua pelos seus dados reais)
+    const SUPABASE_URL = 'https://iolqeovjhayslwkqsduf.supabase.co'; 
+    const SUPABASE_KEY = 'sb_publishable_qX1lct_Gb5xbFZZ4AnJ5_A_fuHwF7KD';
 
     let supabase = null;
-    if (SUPABASE_URL && !SUPABASE_URL.includes('sua-url')) {
-      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    try {
+      if (SUPABASE_URL && !SUPABASE_URL.includes('SUA-URL') && typeof window.supabase !== 'undefined') {
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      }
+    } catch (e) {
+      console.warn("Supabase não configurado ou chave inválida.", e);
     }
 
-    // Estado Global
     let currentStudent = null;
     let studentGender = null;
     let currentAttempts = 0;
@@ -640,7 +628,6 @@
     let timerSeconds = 0;
     let timerInterval = null;
 
-    // BANCO DE 30 QUESTÕES
     const questions = [
       { id: 1, type: 'mc2', text: '1. Complete a frase: "________ a dog in the garden."', options: ['There is', 'There are'], answer: 'There is', exp: 'Usamos "There is" porque "a dog" (um cachorro) está no singular.' },
       { id: 2, type: 'mc2', text: '2. Complete a frase: "________ three books on the desk."', options: ['There is', 'There are'], answer: 'There are', exp: 'Usamos "There are" porque "three books" (três livros) está no plural.' },
@@ -674,13 +661,14 @@
       { id: 30, type: 'unscramble', text: '30. Desembaralhe a frase posicionando o advérbio corretamente:', words: ['We', 'always', 'listen', 'to', 'our', 'teacher'], answer: 'We always listen to our teacher' }
     ];
 
-    // Navegação
     function goToPage(pageNum) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.getElementById(`page${pageNum}`).classList.add('active');
+      const targetPage = document.getElementById(`page${pageNum}`);
+      if (targetPage) {
+        targetPage.classList.add('active');
+      }
     }
 
-    // Gerenciador do Seleção de Aluno
     async function handleStudentSelect(studentName) {
       currentStudent = studentName;
       const select = document.getElementById('studentSelect');
@@ -776,7 +764,7 @@
         html += `<div class="options-grid">`;
         q.options.forEach(opt => {
           const isSelected = userAnswers[q.id] === opt ? 'selected' : '';
-          html += `<button class="opt-btn ${isSelected}" onclick="selectOption('${opt}')">${opt}</button>`;
+          html += `<button class="opt-btn ${isSelected}" type="button" onclick="selectOption('${opt}')">${opt}</button>`;
         });
         html += `</div>`;
       } else if (q.type === 'unscramble') {
@@ -941,7 +929,6 @@
       goToPage(4);
     }
 
-    // BANCO DE DADOS SUPABASE
     async function getStudentAttempts(studentName) {
       if (!supabase) return 0;
       try {
