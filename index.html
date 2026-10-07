@@ -678,7 +678,7 @@
     /* =========================
        DADOS DAS QUESTÕES
        ========================= */
-var questions = [
+    var questions = [
       { id: 1, type: 'mc2', text: '1. Complete a frase: "________ a dog in the garden."', options: ['There is', 'There are'], answer: 'There is', exp: 'Usamos "There is" porque "a dog" (um cachorro) está no singular.' },
       { id: 2, type: 'mc2', text: '2. Complete a frase: "________ three books on the desk."', options: ['There is', 'There are'], answer: 'There are', exp: 'Usamos "There are" porque "three books" (três livros) está no plural.' },
       { id: 3, type: 'mc2', text: '3. Complete a frase: "________ an apple in the basket."', options: ['There is', 'There are'], answer: 'There is', exp: 'Usamos "There is" porque "an apple" (uma maçã) está no singular.' },
@@ -1020,7 +1020,7 @@ var questions = [
 
       container.innerHTML = html;
 
-      // Eventos delegados/seguros, sem onclick inline.
+      // Eventos delegados/seguros, sem conflito duplo.
       container.querySelectorAll('[data-option]').forEach(function(button) {
         button.addEventListener('click', function() {
           selectOption(decodeURIComponent(button.dataset.option));
@@ -1400,26 +1400,6 @@ var questions = [
     document.addEventListener('DOMContentLoaded', function() {
       // Garantia extra: o quiz sempre começa na primeira página.
       goToPage(1);
-
-      $('btnStartQuiz').addEventListener('click', function(event) {
-        event.preventDefault();
-        startQuiz();
-      });
-
-      $('btnPrev').addEventListener('click', function(event) {
-        event.preventDefault();
-        prevQuestion();
-      });
-
-      $('btnCheck').addEventListener('click', function(event) {
-        event.preventDefault();
-        checkAnswer();
-      });
-
-      $('btnNext').addEventListener('click', function(event) {
-        event.preventDefault();
-        nextQuestion();
-      });
     });
   </script>
 
