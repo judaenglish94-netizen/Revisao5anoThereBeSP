@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>English Quiz - 5º Ano | Colégio Ideal</title>
+  <title>Quiz de Língua Inglesa | Colégio Ideal</title>
   <!-- Supabase JS Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <!-- Google Fonts -->
@@ -11,16 +11,13 @@
   <style>
     :root {
       --primary-orange: #F15A24;
-      --light-orange-bg: #FFF3EB;
+      --bg-orange-light: #FFF2EB; /* Laranja suave de fundo */
       --dark-purple: #2B1842;
-      --accent-yellow: #FFC107;
+      --card-white: #FFFFFF;
       --boy-bg: #E3F2FD;
-      --boy-accent: #1976D2;
       --girl-bg: #FCE4EC;
-      --girl-accent: #D81B60;
       --success-green: #2E7D32;
       --error-red: #C62828;
-      --card-white: #FFFFFF;
     }
 
     * {
@@ -31,18 +28,20 @@
     }
 
     body {
-      background-color: var(--light-orange-bg);
+      background-color: var(--bg-orange-light);
       color: var(--dark-purple);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: flex-start;
+      padding: 30px 15px;
       transition: background-color 0.4s ease;
       position: relative;
       overflow-x: hidden;
     }
 
-    /* Floating elements for dynamic backgrounds */
+    /* Elementos Flutuantes de Fundo */
     .bg-floaters {
       position: fixed;
       top: 0;
@@ -67,30 +66,49 @@
       100% { transform: translateY(-10vh) rotate(360deg); }
     }
 
-    /* Header */
-    header {
-      width: 100%;
-      background-color: var(--card-white);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-      padding: 15px 20px;
+    /* Top Logo & Header (Estilo Identico a Imagem) */
+    .app-header {
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      position: relative;
-      z-index: 10;
-      border-bottom: 4px solid var(--primary-orange);
+      margin-bottom: 25px;
+      z-index: 5;
+      text-align: center;
+    }
+
+    .logo-card {
+      background: var(--card-white);
+      padding: 12px 20px;
+      border-radius: 24px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 15px;
     }
 
     .logo-img {
-      max-height: 70px;
+      max-height: 80px;
       object-fit: contain;
     }
 
-    /* Container for pages */
+    .app-header h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--dark-purple);
+      margin-bottom: 4px;
+    }
+
+    .app-header p {
+      font-size: 1rem;
+      color: #666;
+      font-weight: 500;
+    }
+
+    /* Container dos Cards da Aplicação */
     .container {
-      width: 90%;
-      max-width: 850px;
-      margin: 25px auto;
+      width: 100%;
+      max-width: 650px;
       z-index: 5;
       position: relative;
     }
@@ -98,11 +116,10 @@
     .page {
       display: none;
       background: var(--card-white);
-      border-radius: 20px;
-      padding: 30px;
-      box-shadow: 0 10px 30px rgba(43, 24, 66, 0.1);
-      border: 2px solid rgba(241, 90, 36, 0.1);
-      animation: fadeIn 0.4s ease-in-out;
+      border-radius: 28px;
+      padding: 35px 30px;
+      box-shadow: 0 12px 35px rgba(43, 24, 66, 0.08);
+      animation: fadeIn 0.35s ease-in-out;
     }
 
     .page.active {
@@ -110,43 +127,35 @@
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
+      from { opacity: 0; transform: translateY(12px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Scrollable Box for Page 1 */
+    /* Scrollbox para o Resumo da Pagina 1 */
     .summary-scrollbox {
-      max-height: 400px;
+      max-height: 380px;
       overflow-y: auto;
       padding: 20px;
-      border: 2px dashed var(--primary-orange);
-      border-radius: 12px;
+      border: 2px dashed #F15A2433;
+      border-radius: 16px;
       background-color: #FFFDFB;
       margin: 20px 0;
     }
 
     .summary-scrollbox::-webkit-scrollbar {
-      width: 8px;
+      width: 6px;
     }
     .summary-scrollbox::-webkit-scrollbar-thumb {
       background: var(--primary-orange);
       border-radius: 4px;
     }
 
-    h1, h2, h3 {
-      color: var(--dark-purple);
-      text-align: center;
-    }
-
-    h1 {
-      font-size: 1.8rem;
-      margin-bottom: 10px;
-    }
-
     h2 {
       font-size: 1.4rem;
       color: var(--primary-orange);
-      margin-bottom: 15px;
+      text-align: center;
+      margin-bottom: 12px;
+      font-weight: 700;
     }
 
     .topic-title {
@@ -154,7 +163,7 @@
       color: var(--primary-orange);
       margin-top: 15px;
       margin-bottom: 5px;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
     }
 
     p, li {
@@ -169,63 +178,64 @@
     }
 
     .example {
-      background-color: #EFEFEF;
-      padding: 6px 12px;
+      background-color: #F4F4F6;
+      padding: 8px 12px;
       border-left: 4px solid var(--dark-purple);
-      border-radius: 4px;
-      margin: 5px 0;
+      border-radius: 6px;
+      margin: 6px 0;
       font-weight: 500;
+      font-size: 0.9rem;
     }
 
-    /* Buttons */
+    /* Botões Arredondados e Estilizados */
     .btn {
       background-color: var(--primary-orange);
       color: white;
       border: none;
-      padding: 14px 28px;
-      font-size: 1.1rem;
+      padding: 14px 32px;
+      font-size: 1rem;
       font-weight: 700;
-      border-radius: 30px;
+      border-radius: 50px;
       cursor: pointer;
       display: block;
       margin: 20px auto 0 auto;
       transition: all 0.2s ease;
-      box-shadow: 0 4px 10px rgba(241, 90, 36, 0.3);
+      box-shadow: 0 6px 16px rgba(241, 90, 36, 0.28);
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
 
     .btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 15px rgba(241, 90, 36, 0.4);
+      box-shadow: 0 8px 20px rgba(241, 90, 36, 0.38);
       background-color: #D84A1A;
     }
 
     .btn:disabled {
-      background-color: #CCC;
+      background-color: #D1D1D6;
+      color: #8E8E93;
       cursor: not-allowed;
       box-shadow: none;
       transform: none;
     }
 
-    /* Page 2 specific styles */
+    /* Badge da Professora */
     .teacher-badge {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 15px;
+      gap: 12px;
       background: #FFFDFB;
       border: 2px solid var(--primary-orange);
-      padding: 12px 20px;
+      padding: 10px 18px;
       border-radius: 50px;
       margin: 0 auto 20px auto;
       width: fit-content;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     }
 
     .teacher-img {
-      width: 55px;
-      height: 55px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
       object-fit: cover;
       border: 2px solid var(--dark-purple);
@@ -234,21 +244,28 @@
     .teacher-badge span {
       font-weight: 700;
       color: var(--dark-purple);
-      font-size: 1rem;
+      font-size: 0.95rem;
     }
 
+    /* Select Box Estilo Imagem */
     .select-box {
       width: 100%;
-      max-width: 400px;
-      padding: 12px 16px;
-      font-size: 1rem;
-      border: 2px solid var(--dark-purple);
-      border-radius: 10px;
-      margin: 20px auto;
+      padding: 14px 18px;
+      font-size: 0.95rem;
+      border: 2px solid #E5E5EA;
+      border-radius: 14px;
+      margin: 15px 0 20px 0;
       display: block;
       outline: none;
-      background: white;
+      background: #F9F9FB;
       font-weight: 500;
+      color: var(--dark-purple);
+      transition: border-color 0.2s;
+    }
+
+    .select-box:focus {
+      border-color: var(--primary-orange);
+      background: #FFFFFF;
     }
 
     /* Quiz Bar & Timer */
@@ -257,17 +274,17 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
-      padding-bottom: 10px;
-      border-bottom: 2px solid #EEE;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #F0F0F3;
     }
 
     .timer-badge {
       background-color: var(--dark-purple);
       color: white;
-      padding: 8px 16px;
+      padding: 6px 14px;
       border-radius: 20px;
       font-weight: 700;
-      font-size: 1rem;
+      font-size: 0.9rem;
       display: flex;
       align-items: center;
       gap: 6px;
@@ -278,26 +295,27 @@
       color: var(--primary-orange);
     }
 
-    /* Question Styles */
+    /* Questões */
     .question-title {
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       font-weight: 700;
       margin-bottom: 20px;
+      color: var(--dark-purple);
     }
 
     .options-grid {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
     .opt-btn {
-      background: #F9F9F9;
-      border: 2px solid #E0E0E0;
+      background: #F9F9FB;
+      border: 2px solid #E5E5EA;
       padding: 14px 18px;
-      border-radius: 10px;
+      border-radius: 12px;
       text-align: left;
-      font-size: 1rem;
+      font-size: 0.95rem;
       cursor: pointer;
       transition: all 0.2s ease;
       font-weight: 500;
@@ -315,11 +333,11 @@
       font-weight: 700;
     }
 
-    /* Unscramble area */
+    /* Area Unscramble */
     .unscramble-target {
       min-height: 55px;
       border: 2px dashed var(--primary-orange);
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 10px;
       display: flex;
       flex-wrap: wrap;
@@ -343,7 +361,7 @@
       border-radius: 20px;
       cursor: pointer;
       font-weight: 600;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       user-select: none;
       transition: transform 0.1s;
     }
@@ -355,9 +373,9 @@
     .feedback-box {
       margin-top: 20px;
       padding: 15px;
-      border-radius: 10px;
+      border-radius: 12px;
       display: none;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       line-height: 1.5;
     }
 
@@ -385,7 +403,7 @@
       color: white;
       border: none;
       padding: 10px 20px;
-      border-radius: 8px;
+      border-radius: 10px;
       font-weight: 600;
       cursor: pointer;
     }
@@ -395,7 +413,7 @@
       color: white;
       border: none;
       padding: 10px 24px;
-      border-radius: 8px;
+      border-radius: 10px;
       font-weight: 700;
       cursor: pointer;
     }
@@ -408,9 +426,10 @@
     }
 
     .ranking-table th, .ranking-table td {
-      padding: 12px;
+      padding: 10px;
       text-align: center;
-      border-bottom: 1px solid #E0E0E0;
+      border-bottom: 1px solid #E5E5EA;
+      font-size: 0.9rem;
     }
 
     .ranking-table th {
@@ -420,19 +439,14 @@
     }
 
     .ranking-table tr:nth-child(even) {
-      background-color: #F9F9F9;
+      background-color: #F9F9FB;
     }
 
-    .ranking-table tr:first-child td {
-      font-weight: 700;
-      color: var(--primary-orange);
-    }
-
-    /* Modal Warning */
+    /* Modal */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6);
+      background: rgba(0,0,0,0.5);
       display: none;
       justify-content: center;
       align-items: center;
@@ -442,8 +456,8 @@
     .modal-card {
       background: white;
       padding: 30px;
-      border-radius: 15px;
-      max-width: 450px;
+      border-radius: 20px;
+      max-width: 420px;
       width: 90%;
       text-align: center;
     }
@@ -454,73 +468,75 @@
   <!-- Elementos Flutuantes Dinâmicos -->
   <div class="bg-floaters" id="bgFloaters"></div>
 
-  <!-- Header com a Logo da Escola -->
-  <header>
-    <img src="images.png" alt="Colégio Ideal" class="logo-img">
-  </header>
+  <!-- Header Estilizado idêntico à imagem -->
+  <div class="app-header">
+    <div class="logo-card">
+      <img src="images.png" alt="Colégio Ideal" class="logo-img">
+    </div>
+    <h1>Quiz de Língua Inglesa</h1>
+    <p>Colégio Ideal - 5º Ano</p>
+  </div>
 
   <div class="container">
     
     <!-- PÁGINA 1: RESUMO DOS ASSUNTOS -->
     <div class="page active" id="page1">
-      <h1>Revisão de Inglês - 5º Ano</h1>
-      <h2>Colégio Ideal • Unidade III</h2>
+      <h2>Revisão e Instruções</h2>
 
       <div class="summary-scrollbox">
-        <p>Olá, querido(a) aluno(a)! Leia as regras abaixo com bastante atenção antes de começar o quiz:</p>
+        <p>Olá, querido(a) aluno(a)! Leia as regras abaixo com atenção antes de começar o quiz:</p>
         
         <div class="topic-title">1. There Is vs. There Are (Haver / Existir)</div>
-        <p>Usamos estas estruturas para dizer que algo existe em um determinado lugar:</p>
+        <p>Usamos estas estruturas para dizer que algo existe em um lugar:</p>
         <ul>
-          <li><strong>There is</strong>: Usado para o <strong>SINGULAR</strong> (uma única coisa ou pessoa).</li>
+          <li><strong>There is</strong>: Usado para o <strong>SINGULAR</strong> (uma coisa ou pessoa).</li>
         </ul>
         <div class="example">Exemplo: There is a book on the table. (Há um livro sobre a mesa.)</div>
         <ul>
-          <li><strong>There are</strong>: Usado para o <strong>PLURAL</strong> (duas ou mais coisas ou pessoas).</li>
+          <li><strong>There are</strong>: Usado para o <strong>PLURAL</strong> (duas ou mais coisas).</li>
         </ul>
         <div class="example">Exemplo: There are two apples in the bag. (Há duas maçãs na bolsa.)</div>
 
         <div class="topic-title">2. Simple Present (Presente Simples)</div>
-        <p>Usamos o Simple Present para falar de rotinas, fatos e hábitos do dia a dia.</p>
-        <p><strong>A Regra Especial (He, She, It):</strong> Quando o sujeito for <em>He</em> (ele), <em>She</em> (ela) ou <em>It</em> (objeto/animal/coisa no singular), devemos adicionar <strong>-S</strong>, <strong>-ES</strong> ou <strong>-IES</strong> no verbo na forma AFIRMATIVA!</p>
+        <p>Usamos para falar de rotinas e hábitos.</p>
+        <p><strong>A Regra Especial (He, She, It):</strong> Na afirmativa, adicionamos <strong>-S</strong>, <strong>-ES</strong> ou <strong>-IES</strong> no verbo!</p>
         <div class="example">Exemplo: She plays soccer every day. (Ela joga futebol todo dia.)</div>
         <div class="example">Exemplo: He watches TV at night. (Ele assiste TV à noite.)</div>
         <p>Para os demais sujeitos (<em>I, You, We, They</em>), o verbo continua normal:</p>
         <div class="example">Exemplo: They play soccer. (Eles jogam futebol.)</div>
 
-        <p><strong>Estruturas Completa do Simple Present:</strong></p>
+        <p><strong>Estrutura Completa:</strong></p>
         <ul>
-          <li><strong>Afirmativa</strong>: Subject (Sujeito) + Verbo (+ S para He/She/It)</li>
-          <li><strong>Negativa</strong>: Usamos <strong>don't</strong> (para I, You, We, They) ou <strong>doesn't</strong> (para He, She, It) antes do verbo.</li>
+          <li><strong>Afirmativa</strong>: Sujeito + Verbo (+ S para He/She/It)</li>
+          <li><strong>Negativa</strong>: Usamos <strong>don't</strong> (I, You, We, They) ou <strong>doesn't</strong> (He, She, It) antes do verbo.</li>
         </ul>
         <div class="example">Exemplo: He doesn't like milk. (Ele não gosta de leite.)</div>
         <ul>
-          <li><strong>Interrogativa</strong>: Usamos <strong>Do</strong> ou <strong>Does</strong> no início da frase.</li>
+          <li><strong>Interrogativa</strong>: Usamos <strong>Do</strong> ou <strong>Does</strong> no início.</li>
         </ul>
         <div class="example">Exemplo: Does she play tennis? (Ela joga tênis?)</div>
 
-        <div class="topic-title">3. Advérbios de Frequência (Adverbs of Frequency)</div>
-        <p>Indicam com que frequência fazemos algo: <strong>always</strong> (sempre), <strong>usually</strong> (geralmente), <strong>sometimes</strong> (às vezes), <strong>never</strong> (nunca).</p>
-        <p><strong>Regra de Ouro da Posição:</strong> O advérbio de frequência fica sempre <u>DEPOIS do sujeito</u> e <u>ANTES do verbo principal</u>!</p>
+        <div class="topic-title">3. Advérbios de Frequência</div>
+        <p>Indicam a frequência das ações: <strong>always</strong> (sempre), <strong>usually</strong> (geralmente), <strong>sometimes</strong> (às vezes), <strong>never</strong> (nunca).</p>
+        <p><strong>Regra de Ouro:</strong> O advérbio fica sempre <u>DEPOIS do sujeito</u> e <u>ANTES do verbo principal</u>!</p>
         <div class="example">Estrutura: [Sujeito] + [Advérbio] + [Verbo]</div>
         <div class="example">Exemplo: I <strong>always</strong> eat breakfast. (Eu sempre tomo café da manhã.)</div>
-        <div class="example">Exemplo: She <strong>never</strong> walks to school. (Ela nunca caminha para a escola.)</div>
       </div>
 
       <button class="btn" onclick="goToPage(2)">Login</button>
     </div>
 
-    <!-- PÁGINA 2: SELEÇÃO DE ALUNO & IDENTIFICAÇÃO DE TURMA -->
+    <!-- PÁGINA 2: IDENTIFICAÇÃO DO ALUNO -->
     <div class="page" id="page2">
-      <!-- Imagem Estratégica da Professora Milena -->
       <div class="teacher-badge">
         <img src="images2.png" alt="Professora Milena" class="teacher-img">
         <span>Turma Milena • 5º Ano</span>
       </div>
 
-      <h2>Selecione seu nome para iniciar</h2>
-      <p style="text-align: center; color: #666;">Escolha abaixo seu nome da lista oficial para começar a atividade.</p>
+      <h2>Identificação do Aluno</h2>
+      <p style="text-align: center; color: #666; font-size: 0.9rem;">Selecione seu nome na lista para começar:</p>
 
+      <label style="font-weight: 600; font-size: 0.9rem; margin-top: 15px; display: block;">Nome do Aluno:</label>
       <select id="studentSelect" class="select-box" onchange="handleStudentSelect(this.value)">
         <option value="" disabled selected>-- Selecione seu nome --</option>
         <option value="ANA CAROLINA SILVA SANTANA" data-gender="female">ANA CAROLINA SILVA SANTANA</option>
@@ -545,7 +561,7 @@
         <option value="VICTOR HUGO RIBEIRO ALMEIDA" data-gender="male">VICTOR HUGO RIBEIRO ALMEIDA</option>
       </select>
 
-      <div id="attemptInfo" style="text-align: center; margin: 10px 0; font-weight: 600; color: var(--dark-purple);"></div>
+      <div id="attemptInfo" style="text-align: center; margin: 10px 0; font-weight: 600; color: var(--dark-purple); font-size: 0.9rem;"></div>
 
       <button id="btnStartQuiz" class="btn" onclick="startQuiz()" disabled>Start quiz</button>
     </div>
@@ -559,9 +575,7 @@
         </div>
       </div>
 
-      <div id="questionContainer">
-        <!-- Renderizado Dinamicamente via JS -->
-      </div>
+      <div id="questionContainer"></div>
 
       <div class="feedback-box" id="feedbackBox"></div>
 
@@ -577,7 +591,7 @@
       <h2>Resultado do Quiz</h2>
       <div id="resultSummary" style="text-align: center; margin: 15px 0;"></div>
       
-      <div id="pedagogicalFeedback" style="background: #FFFDFB; border: 2px solid var(--primary-orange); padding: 15px; border-radius: 10px; margin: 20px 0;"></div>
+      <div id="pedagogicalFeedback" style="background: #FFFDFB; border: 2px solid var(--primary-orange); padding: 15px; border-radius: 12px; margin: 20px 0;"></div>
 
       <h3>🏆 Ranking Top 10 (Turma Milena)</h3>
       <table class="ranking-table">
@@ -585,21 +599,19 @@
           <tr>
             <th>#</th>
             <th>Aluno(a)</th>
-            <th>Pontuação</th>
+            <th>Pontos</th>
             <th>Tempo</th>
           </tr>
         </thead>
-        <tbody id="rankingBody">
-          <!-- Renderizado via JS com dados do Supabase -->
-        </tbody>
+        <tbody id="rankingBody"></tbody>
       </table>
 
-      <button class="btn" onclick="resetToLogin()">Fazer Novo Tentativa / Voltar</button>
+      <button class="btn" onclick="resetToLogin()">Voltar ao Início</button>
     </div>
 
   </div>
 
-  <!-- Modal para alertas de limite de tentativas -->
+  <!-- Modal -->
   <div class="modal-overlay" id="modalAlert">
     <div class="modal-card">
       <h3 style="color: var(--error-red); margin-bottom: 10px;">Limite Atingido</h3>
@@ -609,16 +621,16 @@
   </div>
 
   <script>
-    // Configurações e Credenciais Supabase
-    const SUPABASE_URL = 'https://iolqeovjhayslwkqsduf.supabase.co'; 
-    const SUPABASE_KEY = 'sb_publishable_qX1lct_Gb5xbFZZ4AnJ5_A_fuHwF7KD';
+    // CREDENCIAIS SUPABASE
+    const SUPABASE_URL = 'https://sua-url-do-supabase.supabase.co'; 
+    const SUPABASE_KEY = 'sua-chave-anon-key-aqui';
 
     let supabase = null;
     if (SUPABASE_URL && !SUPABASE_URL.includes('sua-url')) {
       supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     }
 
-    // Estado do Quiz
+    // Estado Global
     let currentStudent = null;
     let studentGender = null;
     let currentAttempts = 0;
@@ -628,30 +640,23 @@
     let timerSeconds = 0;
     let timerInterval = null;
 
-    // BANCO DE QUESTÕES (30 Questões cuidadosamente elaboradas)
+    // BANCO DE 30 QUESTÕES
     const questions = [
-      // Q1-Q5: There is / There are (Objetivas 2 opções)
       { id: 1, type: 'mc2', text: '1. Complete a frase: "________ a dog in the garden."', options: ['There is', 'There are'], answer: 'There is', exp: 'Usamos "There is" porque "a dog" (um cachorro) está no singular.' },
       { id: 2, type: 'mc2', text: '2. Complete a frase: "________ three books on the desk."', options: ['There is', 'There are'], answer: 'There are', exp: 'Usamos "There are" porque "three books" (três livros) está no plural.' },
       { id: 3, type: 'mc2', text: '3. Complete a frase: "________ an apple in the basket."', options: ['There is', 'There are'], answer: 'There is', exp: 'Usamos "There is" porque "an apple" (uma maçã) está no singular.' },
       { id: 4, type: 'mc2', text: '4. Complete a frase: "________ many students in the classroom."', options: ['There is', 'There are'], answer: 'There are', exp: 'Usamos "There are" para "many students" (muitos alunos), que é plural.' },
       { id: 5, type: 'mc2', text: '5. Complete a frase: "________ a computer in my room."', options: ['There is', 'There are'], answer: 'There is', exp: 'Usamos "There is" porque "a computer" (um computador) está no singular.' },
-
-      // Q6-Q10: Singular para Plural (Objetivas 4 opções)
       { id: 6, type: 'mc4', text: '6. Escolha a versão no PLURAL correta de: "There is a car in the garage."', options: ['There are cars in the garage.', 'There is cars in the garage.', 'There are a cars in the garage.', 'There is a car in garage.'], answer: 'There are cars in the garage.', exp: 'No plural, "There is a" muda para "There are" e acrescentamos -s em "cars".' },
       { id: 7, type: 'mc4', text: '7. Escolha a versão no PLURAL correta de: "There is a pencil on the table."', options: ['There is pencils on the table.', 'There are pencils on the table.', 'There are a pencil on table.', 'There is pencil on the table.'], answer: 'There are pencils on the table.', exp: 'No plural, trocamos "There is a" por "There are" e adicionamos "s" ao substantivo.' },
       { id: 8, type: 'mc4', text: '8. Escolha a versão no PLURAL correta de: "There is a student in the library."', options: ['There are a students in the library.', 'There is students in the library.', 'There are students in the library.', 'There are student in the library.'], answer: 'There are students in the library.', exp: 'No plural, "There is" vira "There are" e o substantivo "student" passa para "students".' },
       { id: 9, type: 'mc4', text: '9. Escolha a versão no PLURAL correta de: "There is a toy in the box."', options: ['There are toys in the box.', 'There is toys in the box.', 'There are a toys in the box.', 'There is toy in the box.'], answer: 'There are toys in the box.', exp: 'Correto: "There are" + substantivo no plural ("toys").' },
       { id: 10, type: 'mc4', text: '10. Escolha a versão no PLURAL correta de: "There is a cat under the chair."', options: ['There is cats under the chair.', 'There are cat under the chair.', 'There are cats under the chair.', 'There is a cats under the chair.'], answer: 'There are cats under the chair.', exp: 'No plural, usamos "There are" + "cats".' },
-
-      // Q11-Q15: Desembaralhar (There is / There are)
       { id: 11, type: 'unscramble', text: '11. Desembaralhe as palavras para formar a frase correta:', words: ['There', 'is', 'a', 'cat', 'on', 'the', 'sofa'], answer: 'There is a cat on the sofa' },
       { id: 12, type: 'unscramble', text: '12. Desembaralhe as palavras para formar a frase correta:', words: ['There', 'are', 'five', 'birds', 'in', 'the', 'tree'], answer: 'There are five birds in the tree' },
       { id: 13, type: 'unscramble', text: '13. Desembaralhe as palavras para formar a frase correta:', words: ['Is', 'there', 'a', 'park', 'near', 'here?'], answer: 'Is there a park near here?' },
       { id: 14, type: 'unscramble', text: '14. Desembaralhe as palavras para formar a frase correta:', words: ['There', 'are', 'no', 'cookies', 'left'], answer: 'There are no cookies left' },
       { id: 15, type: 'unscramble', text: '15. Desembaralhe as palavras para formar a frase correta:', words: ['There', 'is', 'an', 'elephant', 'at', 'the', 'zoo'], answer: 'There is an elephant at the zoo' },
-
-      // Q16-Q25: Simple Present Verbs (Pronomes variados)
       { id: 16, type: 'mc4', text: '16. Complete a frase: "She ________ (play) video games every weekend."', options: ['plays', 'play', 'playing', 'does play'], answer: 'plays', exp: 'Para o pronome "She" na afirmativa do Simple Present, adicionamos "-s" ao verbo (play -> plays).' },
       { id: 17, type: 'mc4', text: '17. Complete a frase: "They ________ (live) in a big house."', options: ['lives', 'live', 'living', 'is live'], answer: 'live', exp: 'Para o pronome "They", o verbo não sofre alteração e permanece "live".' },
       { id: 18, type: 'mc4', text: '18. Complete a frase: "He ________ (watch) cartoons in the morning."', options: ['watchs', 'watches', 'watch', 'is watch'], answer: 'watches', exp: 'Verbos terminados em -ch recebem "-es" quando usados com He, She ou It (watch -> watches).' },
@@ -662,8 +667,6 @@
       { id: 23, type: 'mc4', text: '23. Complete a frase: "The dog ________ (run) fast in the park."', options: ['runs', 'run', 'runes', 'running'], answer: 'runs', exp: '"The dog" equivale a "It", por isso adicionamos "-s" ao verbo (run -> runs).' },
       { id: 24, type: 'mc4', text: '24. Complete a frase: "I ________ (go) to school by bus."', options: ['goes', 'going', 'go', 'is go'], answer: 'go', exp: 'Com o pronome "I", o verbo permanece na sua forma original "go".' },
       { id: 25, type: 'mc4', text: '25. Complete a frase: "My brother ________ (study) hard for tests."', options: ['studys', 'studies', 'study', 'is study'], answer: 'studies', exp: 'Verbos terminados em consoante + Y trocam o Y por "-ies" com He/She/It (study -> studies).' },
-
-      // Q26-Q30: Desembaralhar - Advérbios de Frequência
       { id: 26, type: 'unscramble', text: '26. Desembaralhe a frase posicionando o advérbio corretamente:', words: ['I', 'always', 'brush', 'my', 'teeth'], answer: 'I always brush my teeth' },
       { id: 27, type: 'unscramble', text: '27. Desembaralhe a frase posicionando o advérbio corretamente:', words: ['She', 'never', 'arrives', 'late', 'for', 'class'], answer: 'She never arrives late for class' },
       { id: 28, type: 'unscramble', text: '28. Desembaralhe a frase posicionando o advérbio corretamente:', words: ['They', 'usually', 'play', 'soccer', 'on', 'Fridays'], answer: 'They usually play soccer on Fridays' },
@@ -671,7 +674,7 @@
       { id: 30, type: 'unscramble', text: '30. Desembaralhe a frase posicionando o advérbio corretamente:', words: ['We', 'always', 'listen', 'to', 'our', 'teacher'], answer: 'We always listen to our teacher' }
     ];
 
-    // Navegação entre páginas
+    // Navegação
     function goToPage(pageNum) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.getElementById(`page${pageNum}`).classList.add('active');
@@ -684,11 +687,9 @@
       const selectedOption = select.options[select.selectedIndex];
       studentGender = selectedOption.getAttribute('data-gender');
 
-      // Aplicação dos Temas Dinâmicos
       applyDynamicTheme(studentGender);
 
-      // Verificação de tentativas no Supabase
-      document.getElementById('attemptInfo').innerText = "Consultando histórico de tentativas...";
+      document.getElementById('attemptInfo').innerText = "Consultando histórico...";
       currentAttempts = await getStudentAttempts(currentStudent);
       
       document.getElementById('attemptInfo').innerText = `Tentativas já realizadas: ${currentAttempts} de 3`;
@@ -702,7 +703,6 @@
       }
     }
 
-    // Aplica o tema visual conforme o gênero
     function applyDynamicTheme(gender) {
       const body = document.body;
       const floatersContainer = document.getElementById('bgFloaters');
@@ -733,12 +733,11 @@
           floatersContainer.appendChild(div);
         }
       } else {
-        body.style.backgroundColor = 'var(--light-orange-bg)';
+        body.style.backgroundColor = 'var(--bg-orange-light)';
         floatersContainer.style.display = 'none';
       }
     }
 
-    // Iniciar o Quiz
     function startQuiz() {
       if (currentAttempts >= 3) return;
       currentQuestionIndex = 0;
@@ -751,7 +750,6 @@
       goToPage(3);
     }
 
-    // Timer
     function startTimer() {
       clearInterval(timerInterval);
       timerInterval = setInterval(() => {
@@ -762,7 +760,6 @@
       }, 1000);
     }
 
-    // Renderizador de Questões
     function renderQuestion() {
       const q = questions[currentQuestionIndex];
       const container = document.getElementById('questionContainer');
@@ -798,14 +795,8 @@
 
       container.innerHTML = html;
 
-      // Controle dos botões
       document.getElementById('btnPrev').style.visibility = currentQuestionIndex === 0 ? 'hidden' : 'visible';
-      
-      if (currentQuestionIndex === questions.length - 1) {
-        document.getElementById('btnNext').innerText = 'Finalizar';
-      } else {
-        document.getElementById('btnNext').innerText = 'Next';
-      }
+      document.getElementById('btnNext').innerText = currentQuestionIndex === questions.length - 1 ? 'Finalizar' : 'Next';
 
       if (checkedQuestions[q.id]) {
         showQuestionFeedback();
@@ -823,7 +814,7 @@
 
     function selectOption(opt) {
       const q = questions[currentQuestionIndex];
-      if (checkedQuestions[q.id]) return; // Bloqueia mudança se já checou
+      if (checkedQuestions[q.id]) return;
       userAnswers[q.id] = opt;
       renderQuestion();
     }
@@ -894,7 +885,6 @@
       }
     }
 
-    // Finalizar Quiz e Calcular Resultados
     async function finishQuiz() {
       clearInterval(timerInterval);
       
@@ -925,16 +915,14 @@
       const scorePct = Math.round((correctCount / total) * 100);
       const wrongCount = total - correctCount;
 
-      // Monta Resumo
       document.getElementById('resultSummary').innerHTML = `
         <h3>Parabéns, ${currentStudent}!</h3>
-        <p style="font-size: 1.2rem; margin-top: 10px;">
+        <p style="font-size: 1.1rem; margin-top: 10px;">
           Você acertou <strong>${correctCount}</strong> de <strong>${total}</strong> questões (<strong>${scorePct}%</strong> de aproveitamento).
         </p>
         <p>Tempo de conclusão: <strong>${Math.floor(timerSeconds / 60)}m ${timerSeconds % 60}s</strong></p>
       `;
 
-      // Monta Feedback Pedagógico Personalizado
       let fbText = `<strong>Feedback Individualizado:</strong><br>`;
       if (wrongCount === 0) {
         fbText += `Excelente desempenho! Você demonstrou domínio total do There is/are, Simple Present e advérbios de frequência! 🎉`;
@@ -947,16 +935,13 @@
       }
       document.getElementById('pedagogicalFeedback').innerHTML = fbText;
 
-      // Salva no Supabase
       await saveQuizResult(currentStudent, correctCount, total, timerSeconds);
-
-      // Atualiza Ranking Top 10
       await loadTop10Ranking();
 
       goToPage(4);
     }
 
-    // INTEGRAÇÃO BANCO DE DADOS SUPABASE
+    // BANCO DE DADOS SUPABASE
     async function getStudentAttempts(studentName) {
       if (!supabase) return 0;
       try {
@@ -1004,7 +989,6 @@
 
         if (error) throw error;
 
-        // Agrupa por aluno obtendo o MELHOR resultado (Maior Pontuação, Menor Tempo)
         const studentBest = {};
         data.forEach(item => {
           if (!studentBest[item.student_name]) {
@@ -1017,13 +1001,12 @@
           }
         });
 
-        // Converte para Array e Ordena
         const leaderboard = Object.values(studentBest).sort((a, b) => {
           if (b.score !== a.score) {
-            return b.score - a.score; // Maior pontuação primeiro
+            return b.score - a.score;
           }
-          return a.completion_time_seconds - b.completion_time_seconds; // Desempate por tempo (menor primeiro)
-        }).slice(0, 10); // Apenas Top 10
+          return a.completion_time_seconds - b.completion_time_seconds;
+        }).slice(0, 10);
 
         if (leaderboard.length === 0) {
           rankingBody.innerHTML = '<tr><td colspan="4">Nenhum resultado registrado ainda.</td></tr>';
