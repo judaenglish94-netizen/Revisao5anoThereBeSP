@@ -627,7 +627,6 @@
        QUIZ - VERSÃO ROBUSTA E PROTEGIDA
        - A navegação nunca depende do Supabase.
        - Botões com trava temporal (impede "ghost click" e pulo de questões)
-       - PALAVRAS DO UNSCRAMBLE DEVIDAMENTE EMBARALHADAS
        ========================================================= */
 
     const SUPABASE_URL = 'https://iolqeovjhayslwkqsduf.supabase.co';
@@ -691,14 +690,11 @@
       { id: 8, type: 'mc4', text: '8. Escolha a versão no PLURAL correta de: "There is a student in the library."', options: ['There are a students in the library.', 'There is students in the library.', 'There are students in the library.', 'There are student in the library.'], answer: 'There are students in the library.', exp: 'No plural, "There is" vira "There are" e o substantivo "student" passa para "students".' },
       { id: 9, type: 'mc4', text: '9. Escolha a versão no PLURAL correta de: "There is a toy in the box."', options: ['There are toys in the box.', 'There is toys in the box.', 'There are a toys in the box.', 'There is toy in the box.'], answer: 'There are toys in the box.', exp: 'Correto: "There are" + substantivo no plural ("toys").' },
       { id: 10, type: 'mc4', text: '10. Escolha a versão no PLURAL correta de: "There is a cat under the chair."', options: ['There is cats under the chair.', 'There are cat under the chair.', 'There are cats under the chair.', 'There is a cats under the chair.'], answer: 'There are cats under the chair.', exp: 'No plural, usamos "There are" + "cats".' },
-      
-      // AQUI: as palavras agora estão bagunçadas!
-      { id: 11, type: 'unscramble', text: '11. Desembaralhe as palavras para formar a frase correta:', words: ['on', 'a', 'sofa', 'There', 'the', 'cat', 'is'], answer: 'There is a cat on the sofa' },
-      { id: 12, type: 'unscramble', text: '12. Desembaralhe as palavras para formar a frase correta:', words: ['birds', 'in', 'five', 'There', 'tree', 'are', 'the'], answer: 'There are five birds in the tree' },
-      { id: 13, type: 'unscramble', text: '13. Desembaralhe as palavras para formar a frase correta:', words: ['a', 'here?', 'Is', 'park', 'there', 'near'], answer: 'Is there a park near here?' },
-      { id: 14, type: 'unscramble', text: '14. Desembaralhe as palavras para formar a frase correta:', words: ['left', 'cookies', 'are', 'no', 'There'], answer: 'There are no cookies left' },
-      { id: 15, type: 'unscramble', text: '15. Desembaralhe as palavras para formar a frase correta:', words: ['elephant', 'at', 'an', 'the', 'is', 'zoo', 'There'], answer: 'There is an elephant at the zoo' },
-      
+      { id: 11, type: 'unscramble', text: '11. Desembaralhe as palavras para formar a frase correta:', words: ['on', 'a', 'sofa', 'is', 'the', 'There', 'cat'], answer: 'There is a cat on the sofa' },
+      { id: 12, type: 'unscramble', text: '12. Desembaralhe as palavras para formar a frase correta:', words: ['birds', 'tree', 'are', 'There', 'in', 'five', 'the'], answer: 'There are five birds in the tree' },
+      { id: 13, type: 'unscramble', text: '13. Desembaralhe as palavras para formar a frase correta:', words: ['park', 'Is', 'here?', 'near', 'a', 'there'], answer: 'Is there a park near here?' },
+      { id: 14, type: 'unscramble', text: '14. Desembaralhe as palavras para formar a frase correta:', words: ['cookies', 'left', 'are', 'There', 'no'], answer: 'There are no cookies left' },
+      { id: 15, type: 'unscramble', text: '15. Desembaralhe as palavras para formar a frase correta:', words: ['the', 'an', 'zoo', 'is', 'elephant', 'There', 'at'], answer: 'There is an elephant at the zoo' },
       { id: 16, type: 'mc4', text: '16. Complete a frase: "She ________ (play) video games every weekend."', options: ['plays', 'play', 'playing', 'does play'], answer: 'plays', exp: 'Para o pronome "She" na afirmativa do Simple Present, adicionamos "-s" ao verbo (play -> plays).' },
       { id: 17, type: 'mc4', text: '17. Complete a frase: "They ________ (live) in a big house."', options: ['lives', 'live', 'living', 'is live'], answer: 'live', exp: 'Para o pronome "They", o verbo não sofre alteração e permanece "live".' },
       { id: 18, type: 'mc4', text: '18. Complete a frase: "He ________ (watch) cartoons in the morning."', options: ['watchs', 'watches', 'watch', 'is watch'], answer: 'watches', exp: 'Verbos terminados em -ch recebem "-es" quando usados com He, She ou It (watch -> watches).' },
@@ -709,13 +705,11 @@
       { id: 23, type: 'mc4', text: '23. Complete a frase: "The dog ________ (run) fast in the park."', options: ['runs', 'run', 'runes', 'running'], answer: 'runs', exp: '"The dog" equivale a "It", por isso adicionamos "-s" ao verbo (run -> runs).' },
       { id: 24, type: 'mc4', text: '24. Complete a frase: "I ________ (go) to school by bus."', options: ['goes', 'going', 'go', 'is go'], answer: 'go', exp: 'Com o pronome "I", o verbo permanece na sua forma original "go".' },
       { id: 25, type: 'mc4', text: '25. Complete a frase: "My brother ________ (study) hard for tests."', options: ['studys', 'studies', 'study', 'is study'], answer: 'studies', exp: 'Verbos terminados em consoante + Y trocam o Y por "-ies" com He/She/It (study -> studies).' },
-      
-      // AQUI: as palavras agora estão bagunçadas!
-      { id: 26, type: 'unscramble', text: '26. Desembaralhe a frase posicionando o advérbio corretamente:', words: ['teeth', 'I', 'brush', 'always', 'my'], answer: 'I always brush my teeth' },
-      { id: 27, type: 'unscramble', text: '27. Desembaralhe a frase posicionando o advérbio corretamente:', words: ['late', 'She', 'for', 'never', 'class', 'arrives'], answer: 'She never arrives late for class' },
-      { id: 28, type: 'unscramble', text: '28. Desembaralhe a frase posicionando o advérbio corretamente:', words: ['Fridays', 'play', 'They', 'soccer', 'usually', 'on'], answer: 'They usually play soccer on Fridays' },
-      { id: 29, type: 'unscramble', text: '29. Desembaralhe a frase posicionando o advérbio corretamente:', words: ['books', 'at', 'He', 'reads', 'sometimes', 'night'], answer: 'He sometimes reads books at night' },
-      { id: 30, type: 'unscramble', text: '30. Desembaralhe a frase posicionando o advérbio corretamente:', words: ['our', 'listen', 'teacher', 'We', 'always', 'to'], answer: 'We always listen to our teacher' }
+      { id: 26, type: 'unscramble', text: '26. Desembaralhe a frase posicionando o advérbio corretamente:', words: ['brush', 'teeth', 'always', 'I', 'my'], answer: 'I always brush my teeth' },
+      { id: 27, type: 'unscramble', text: '27. Desembaralhe a frase posicionando o advérbio corretamente:', words: ['class', 'never', 'She', 'late', 'for', 'arrives'], answer: 'She never arrives late for class' },
+      { id: 28, type: 'unscramble', text: '28. Desembaralhe a frase posicionando o advérbio corretamente:', words: ['on', 'soccer', 'usually', 'Fridays', 'They', 'play'], answer: 'They usually play soccer on Fridays' },
+      { id: 29, type: 'unscramble', text: '29. Desembaralhe a frase posicionando o advérbio corretamente:', words: ['at', 'reads', 'He', 'night', 'books', 'sometimes'], answer: 'He sometimes reads books at night' },
+      { id: 30, type: 'unscramble', text: '30. Desembaralhe a frase posicionando o advérbio corretamente:', words: ['listen', 'our', 'always', 'We', 'teacher', 'to'], answer: 'We always listen to our teacher' }
     ];
 
     /* =========================
