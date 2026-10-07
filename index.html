@@ -226,20 +226,21 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
+      gap: 12px;
       background: #FFFDFB;
       border: 2px solid var(--primary-orange);
-      padding: 8px 16px;
+      padding: 8px 18px;
       border-radius: 50px;
       margin: 0 auto 15px auto;
       width: fit-content;
     }
 
     .teacher-img {
-      width: 48px;
-      height: 48px;
+      width: 52px;
+      height: 52px;
       border-radius: 50%;
       object-fit: cover;
+      object-position: top center;
       border: 2px solid var(--dark-purple);
       background-color: #FFF;
     }
@@ -247,7 +248,7 @@
     .teacher-badge span {
       font-weight: 700;
       color: var(--dark-purple);
-      font-size: 0.9rem;
+      font-size: 0.95rem;
     }
 
     .select-box {
@@ -528,7 +529,7 @@
     <!-- PÁGINA 2: IDENTIFICAÇÃO DO ALUNO -->
     <div class="page" id="page2">
       <div class="teacher-badge">
-        <img src="images2.jpg" alt="Professora Milena" class="teacher-img" id="teacherImg" onerror="handleTeacherImgError(this)">
+        <img src="images2.png" alt="Professora Milena" class="teacher-img" id="teacherImg">
         <span>Turma Milena • 5º Ano</span>
       </div>
 
@@ -612,26 +613,14 @@
 
   <div class="modal-overlay" id="modalAlert">
     <div class="modal-card">
-      <h3 style="color: var(--error-red); margin-bottom: 10px;">Aviso</h3>
+      <h3 style="color: var(--error-red); margin-bottom: 10px;">Limite Atingido</h3>
       <p id="modalMsg">Você já realizou esta atividade 3 vezes. Não é possível fazer novas tentativas.</p>
       <button class="btn" type="button" style="margin-top: 12px;" onclick="closeModal()">Entender</button>
     </div>
   </div>
 
   <script>
-    function handleTeacherImgError(img) {
-      if (!img.dataset.tried) {
-        img.dataset.tried = "png";
-        img.src = 'images2.png';
-      } else if (img.dataset.tried === "png") {
-        img.dataset.tried = "jpeg";
-        img.src = 'images2.jpeg';
-      } else {
-        img.onerror = null;
-        img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="%232B1842"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-3.8-.85-5.05-2.2.03-1.68 3.37-2.6 5.05-2.6s5.02.92 5.05 2.6C15.8 19.15 14.03 20 12 20z"/></svg>';
-      }
-    }
-
+    // NAVEGAÇÃO ENTRE PÁGINAS
     function goToPage(pageNum) {
       var pages = document.querySelectorAll('.page');
       for (var i = 0; i < pages.length; i++) {
@@ -644,6 +633,7 @@
       }
     }
 
+    // CREDENCIAIS SUPABASE
     const SUPABASE_URL = 'https://iolqeovjhayslwkqsduf.supabase.co'; 
     const SUPABASE_KEY = 'sb_publishable_qX1lct_Gb5xbFZZ4AnJ5_A_fuHwF7KD';
 
@@ -652,7 +642,7 @@
       try {
         supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
       } catch (e) {
-        console.log("Supabase inicializado em modo offline.");
+        console.log("Supabase aguardando operacao.");
       }
     }
 
@@ -683,4 +673,389 @@
       { id: 15, type: 'unscramble', text: '15. Desembaralhe as palavras para formar a frase correta:', words: ['There', 'is', 'an', 'elephant', 'at', 'the', 'zoo'], answer: 'There is an elephant at the zoo' },
       { id: 16, type: 'mc4', text: '16. Complete a frase: "She ________ (play) video games every weekend."', options: ['plays', 'play', 'playing', 'does play'], answer: 'plays', exp: 'Para o pronome "She" na afirmativa do Simple Present, adicionamos "-s" ao verbo (play -> plays).' },
       { id: 17, type: 'mc4', text: '17. Complete a frase: "They ________ (live) in a big house."', options: ['lives', 'live', 'living', 'is live'], answer: 'live', exp: 'Para o pronome "They", o verbo não sofre alteração e permanece "live".' },
-      { id: 18, type: 'mc4', text: '18. Complete a frase: "He ________ (watch) cartoons in the morning."', options: ['watchs', 'watches', 'watch', 'is watch'], answer: '
+      { id: 18, type: 'mc4', text: '18. Complete a frase: "He ________ (watch) cartoons in the morning."', options: ['watchs', 'watches', 'watch', 'is watch'], answer: 'watches', exp: 'Verbos terminados em -ch recebem "-es" quando usados com He, She ou It (watch -> watches).' },
+      { id: 19, type: 'mc4', text: '19. Complete a frase: "We ________ (not / like) cold pizza."', options: ["doesn't like", "don't like", "not like", "no like"], answer: "don't like", exp: 'Para formar a negativa com "We", usamos o auxiliar "don\'t".' },
+      { id: 20, type: 'mc4', text: '20. Complete a frase: "Peter ________ (not / eat) vegetables."', options: ["don't eat", "doesn't eat", "not eats", "doesn't eats"], answer: "doesn't eat", exp: 'Peter equivale a "He", portanto usamos o auxiliar "doesn\'t" e o verbo fica na forma base (eat).' },
+      { id: 21, type: 'mc4', text: '21. Complete a frase: "________ you study English on Mondays?"', options: ['Does', 'Do', 'Are', 'Is'], answer: 'Do', exp: 'Em perguntas com o pronome "You", iniciamos com o auxiliar "Do".' },
+      { id: 22, type: 'mc4', text: '22. Complete a frase: "________ Mary wash her car on Saturdays?"', options: ['Do', 'Does', 'Is', 'Are'], answer: 'Does', exp: 'Mary equivale a "She", logo iniciamos a pergunta com "Does".' },
+      { id: 23, type: 'mc4', text: '23. Complete a frase: "The dog ________ (run) fast in the park."', options: ['runs', 'run', 'runes', 'running'], answer: 'runs', exp: '"The dog" equivale a "It", por isso adicionamos "-s" ao verbo (run -> runs).' },
+      { id: 24, type: 'mc4', text: '24. Complete a frase: "I ________ (go) to school by bus."', options: ['goes', 'going', 'go', 'is go'], answer: 'go', exp: 'Com o pronome "I", o verbo permanece na sua forma original "go".' },
+      { id: 25, type: 'mc4', text: '25. Complete a frase: "My brother ________ (study) hard for tests."', options: ['studys', 'studies', 'study', 'is study'], answer: 'studies', exp: 'Verbos terminados em consoante + Y trocam o Y por "-ies" com He/She/It (study -> studies).' },
+      { id: 26, type: 'unscramble', text: '26. Desembaralhe a frase posicionando o advérbio corretamente:', words: ['I', 'always', 'brush', 'my', 'teeth'], answer: 'I always brush my teeth' },
+      { id: 27, type: 'unscramble', text: '27. Desembaralhe a frase posicionando o advérbio corretamente:', words: ['She', 'never', 'arrives', 'late', 'for', 'class'], answer: 'She never arrives late for class' },
+      { id: 28, type: 'unscramble', text: '28. Desembaralhe a frase posicionando o advérbio corretamente:', words: ['They', 'usually', 'play', 'soccer', 'on', 'Fridays'], answer: 'They usually play soccer on Fridays' },
+      { id: 29, type: 'unscramble', text: '29. Desembaralhe a frase posicionando o advérbio corretamente:', words: ['He', 'sometimes', 'reads', 'books', 'at', 'night'], answer: 'He sometimes reads books at night' },
+      { id: 30, type: 'unscramble', text: '30. Desembaralhe a frase posicionando o advérbio corretamente:', words: ['We', 'always', 'listen', 'to', 'our', 'teacher'], answer: 'We always listen to our teacher' }
+    ];
+
+    function handleStudentSelect(studentName) {
+      currentStudent = studentName;
+      var select = document.getElementById('studentSelect');
+      var selectedOption = select.options[select.selectedIndex];
+      studentGender = selectedOption.getAttribute('data-gender');
+
+      applyDynamicTheme(studentGender);
+
+      // Habilita o botao de inicio IMEDIATAMENTE ao escolher o nome
+      var btnStart = document.getElementById('btnStartQuiz');
+      btnStart.disabled = false;
+      document.getElementById('attemptInfo').innerText = "Pronto para começar!";
+
+      // Consulta o banco em segundo plano sem travar o botao
+      checkAttemptsInBackground(currentStudent);
+    }
+
+    async function checkAttemptsInBackground(studentName) {
+      currentAttempts = await getStudentAttempts(studentName);
+      var btnStart = document.getElementById('btnStartQuiz');
+
+      if (currentAttempts >= 3) {
+        btnStart.disabled = true;
+        document.getElementById('attemptInfo').innerText = "Tentativas realizadas: " + currentAttempts + " de 3 (Limite atingido)";
+        showModal("Limite de 3 tentativas atingido por este aluno! Escolha outro nome para continuar.");
+      } else {
+        document.getElementById('attemptInfo').innerText = "Tentativas realizadas: " + currentAttempts + " de 3";
+      }
+    }
+
+    function applyDynamicTheme(gender) {
+      var body = document.body;
+      var appHeader = document.getElementById('appHeader');
+      var floatersContainer = document.getElementById('bgFloaters');
+      floatersContainer.innerHTML = '';
+
+      if (gender === 'male') {
+        body.style.backgroundColor = 'var(--boy-bg)';
+        appHeader.style.background = 'var(--boy-bg)';
+        floatersContainer.style.display = 'block';
+        var icons = ['🚀', '⚡', '⚽'];
+        for (var i = 0; i < 15; i++) {
+          var div = document.createElement('div');
+          div.className = 'floater';
+          div.innerText = icons[Math.floor(Math.random() * icons.length)];
+          div.style.left = (Math.random() * 90) + '%';
+          div.style.animationDuration = (6 + Math.random() * 8) + 's';
+          floatersContainer.appendChild(div);
+        }
+      } else if (gender === 'female') {
+        body.style.backgroundColor = 'var(--girl-bg)';
+        appHeader.style.background = 'var(--girl-bg)';
+        floatersContainer.style.display = 'block';
+        var icons = ['🦄', '🍦', '🌸'];
+        for (var j = 0; j < 15; j++) {
+          var div2 = document.createElement('div');
+          div2.className = 'floater';
+          div2.innerText = icons[Math.floor(Math.random() * icons.length)];
+          div2.style.left = (Math.random() * 90) + '%';
+          div2.style.animationDuration = (6 + Math.random() * 8) + 's';
+          floatersContainer.appendChild(div2);
+        }
+      } else {
+        body.style.backgroundColor = 'var(--bg-orange-soft)';
+        appHeader.style.background = 'var(--bg-orange-soft)';
+        floatersContainer.style.display = 'none';
+      }
+    }
+
+    function startQuiz() {
+      if (currentAttempts >= 3) return;
+      currentQuestionIndex = 0;
+      userAnswers = {};
+      checkedQuestions = {};
+      timerSeconds = 0;
+      
+      startTimer();
+      renderQuestion();
+      goToPage(3);
+    }
+
+    function startTimer() {
+      clearInterval(timerInterval);
+      timerInterval = setInterval(function() {
+        timerSeconds++;
+        var mins = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+        var secs = String(timerSeconds % 60).padStart(2, '0');
+        document.getElementById('timerDisplay').innerText = mins + ":" + secs;
+      }, 1000);
+    }
+
+    function renderQuestion() {
+      var q = questions[currentQuestionIndex];
+      var container = document.getElementById('questionContainer');
+      var feedbackBox = document.getElementById('feedbackBox');
+      
+      feedbackBox.style.display = 'none';
+      feedbackBox.className = 'feedback-box';
+      
+      document.getElementById('qCounter').innerText = "Questão " + (currentQuestionIndex + 1) + " de " + questions.length;
+
+      var html = '<div class="question-title">' + q.text + '</div>';
+
+      if (q.type === 'mc2' || q.type === 'mc4') {
+        html += '<div class="options-grid">';
+        q.options.forEach(function(opt) {
+          var isSelected = userAnswers[q.id] === opt ? 'selected' : '';
+          var safeOpt = opt.replace(/'/g, "\\'");
+          html += '<button class="opt-btn ' + isSelected + '" type="button" onclick="selectOption(\'' + safeOpt + '\')">' + opt + '</button>';
+        });
+        html += '</div>';
+      } else if (q.type === 'unscramble') {
+        var currentAnswerArray = userAnswers[q.id] || [];
+        var availableWords = getAvailableWords(q.words, currentAnswerArray);
+
+        html += '<div class="unscramble-target" id="unscrambleTarget">' +
+          currentAnswerArray.map(function(w, idx) { return '<span class="word-chip" onclick="removeWord(' + idx + ')">' + w + ' ✕</span>'; }).join('') +
+          '</div>' +
+          '<div class="word-pool">' +
+          availableWords.map(function(w) { 
+            var safeW = w.replace(/'/g, "\\'");
+            return '<span class="word-chip" onclick="addWord(\'' + safeW + '\')">' + w + '</span>'; 
+          }).join('') +
+          '</div>';
+      }
+
+      container.innerHTML = html;
+
+      document.getElementById('btnPrev').style.visibility = currentQuestionIndex === 0 ? 'hidden' : 'visible';
+      document.getElementById('btnNext').innerText = currentQuestionIndex === questions.length - 1 ? 'Finalizar' : 'Next';
+
+      if (checkedQuestions[q.id]) {
+        showQuestionFeedback();
+      }
+    }
+
+    function getAvailableWords(allWords, selectedWords) {
+      var pool = allWords.slice();
+      selectedWords.forEach(function(sw) {
+        var idx = pool.indexOf(sw);
+        if (idx > -1) pool.splice(idx, 1);
+      });
+      return pool;
+    }
+
+    function selectOption(opt) {
+      var q = questions[currentQuestionIndex];
+      if (checkedQuestions[q.id]) return;
+      userAnswers[q.id] = opt;
+      renderQuestion();
+    }
+
+    function addWord(word) {
+      var q = questions[currentQuestionIndex];
+      if (checkedQuestions[q.id]) return;
+      if (!userAnswers[q.id]) userAnswers[q.id] = [];
+      userAnswers[q.id].push(word);
+      renderQuestion();
+    }
+
+    function removeWord(index) {
+      var q = questions[currentQuestionIndex];
+      if (checkedQuestions[q.id]) return;
+      userAnswers[q.id].splice(index, 1);
+      renderQuestion();
+    }
+
+    function checkAnswer() {
+      var q = questions[currentQuestionIndex];
+      checkedQuestions[q.id] = true;
+      showQuestionFeedback();
+    }
+
+    function showQuestionFeedback() {
+      var q = questions[currentQuestionIndex];
+      var feedbackBox = document.getElementById('feedbackBox');
+      var userAns = userAnswers[q.id];
+
+      var isCorrect = false;
+
+      if (q.type === 'unscramble') {
+        var formattedUser = (userAns || []).join(' ');
+        isCorrect = formattedUser.trim().toLowerCase() === q.answer.trim().toLowerCase();
+      } else {
+        isCorrect = userAns === q.answer;
+      }
+
+      feedbackBox.style.display = 'block';
+
+      if (isCorrect) {
+        feedbackBox.className = 'feedback-box correct';
+        feedbackBox.innerHTML = '<strong>✨ Muito bem! Resposta Correta!</strong>';
+      } else {
+        feedbackBox.className = 'feedback-box wrong';
+        feedbackBox.innerHTML = '<strong>❌ Resposta Incorreta.</strong><br>' +
+          '<strong>Resposta correta:</strong> ' + q.answer + '<br>' +
+          (q.exp ? '<strong>Explicação:</strong> ' + q.exp : '');
+      }
+    }
+
+    function prevQuestion() {
+      if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        renderQuestion();
+      }
+    }
+
+    function nextQuestion() {
+      if (currentQuestionIndex < questions.length - 1) {
+        currentQuestionIndex++;
+        renderQuestion();
+      } else {
+        finishQuiz();
+      }
+    }
+
+    async function finishQuiz() {
+      clearInterval(timerInterval);
+      
+      var correctCount = 0;
+      var errorsByTopic = { thereIsAre: 0, simplePresent: 0, adverbs: 0 };
+
+      questions.forEach(function(q) {
+        var uAns = userAnswers[q.id];
+        var correct = false;
+
+        if (q.type === 'unscramble') {
+          var formatted = (uAns || []).join(' ');
+          correct = formatted.trim().toLowerCase() === q.answer.trim().toLowerCase();
+        } else {
+          correct = uAns === q.answer;
+        }
+
+        if (correct) {
+          correctCount++;
+        } else {
+          if (q.id <= 15) errorsByTopic.thereIsAre++;
+          else if (q.id <= 25) errorsByTopic.simplePresent++;
+          else errorsByTopic.adverbs++;
+        }
+      });
+
+      var total = questions.length;
+      var scorePct = Math.round((correctCount / total) * 100);
+      var wrongCount = total - correctCount;
+
+      document.getElementById('resultSummary').innerHTML = '<h3>Parabéns, ' + currentStudent + '!</h3>' +
+        '<p style="font-size: 1rem; margin-top: 8px;">Você acertou <strong>' + correctCount + '</strong> de <strong>' + total + '</strong> questões (<strong>' + scorePct + '%</strong> de aproveitamento).</p>' +
+        '<p>Tempo de conclusão: <strong>' + Math.floor(timerSeconds / 60) + 'm ' + (timerSeconds % 60) + 's</strong></p>';
+
+      var fbText = '<strong>Feedback Individualizado:</strong><br>';
+      if (wrongCount === 0) {
+        fbText += 'Excelente desempenho! Você demonstrou domínio total do There is/are, Simple Present e advérbios de frequência! 🎉';
+      } else {
+        fbText += 'Você errou ' + wrongCount + ' questão(ões). Recomendamos focar em:<br><ul>';
+        if (errorsByTopic.thereIsAre > 0) fbText += '<li><strong>There is / There are</strong>: Revise a diferença entre singular e plural.</li>';
+        if (errorsByTopic.simplePresent > 0) fbText += '<li><strong>Simple Present</strong>: Atenção à regra do -S para He/She/It e o uso do do/does.</li>';
+        if (errorsByTopic.adverbs > 0) fbText += '<li><strong>Advérbios de Frequência</strong>: Lembre-se que eles vêm sempre DEPOIS do sujeito e ANTES do verbo!</li>';
+        fbText += '</ul>';
+      }
+      document.getElementById('pedagogicalFeedback').innerHTML = fbText;
+
+      await saveQuizResult(currentStudent, correctCount, total, timerSeconds);
+      await loadTop10Ranking();
+
+      goToPage(4);
+    }
+
+    async function getStudentAttempts(studentName) {
+      if (!supabase) return 0;
+      try {
+        var res = await supabase.from('quiz_results').select('id').eq('student_name', studentName);
+        return (res && res.data) ? res.data.length : 0;
+      } catch (err) {
+        return 0;
+      }
+    }
+
+    async function saveQuizResult(name, score, total, seconds) {
+      if (!supabase) return;
+      try {
+        await supabase.from('quiz_results').insert([
+          {
+            student_name: name,
+            score: score,
+            total_questions: total,
+            completion_time_seconds: seconds
+          }
+        ]);
+      } catch (err) {
+        console.error("Erro ao salvar resultado:", err);
+      }
+    }
+
+    async function loadTop10Ranking() {
+      var rankingBody = document.getElementById('rankingBody');
+      rankingBody.innerHTML = '<tr><td colspan="4">Carregando ranking...</td></tr>';
+
+      if (!supabase) {
+        rankingBody.innerHTML = '<tr><td colspan="4">Carregando dados...</td></tr>';
+        return;
+      }
+
+      try {
+        var res = await supabase.from('quiz_results').select('student_name, score, completion_time_seconds');
+        if (res.error) throw res.error;
+
+        var studentBest = {};
+        if (res.data) {
+          res.data.forEach(function(item) {
+            if (!studentBest[item.student_name]) {
+              studentBest[item.student_name] = item;
+            } else {
+              var current = studentBest[item.student_name];
+              if (item.score > current.score || (item.score === current.score && item.completion_time_seconds < current.completion_time_seconds)) {
+                studentBest[item.student_name] = item;
+              }
+            }
+          });
+        }
+
+        var leaderboard = Object.values(studentBest).sort(function(a, b) {
+          if (b.score !== a.score) {
+            return b.score - a.score;
+          }
+          return a.completion_time_seconds - b.completion_time_seconds;
+        }).slice(0, 10);
+
+        if (leaderboard.length === 0) {
+          rankingBody.innerHTML = '<tr><td colspan="4">Nenhum resultado registrado ainda.</td></tr>';
+          return;
+        }
+
+        rankingBody.innerHTML = leaderboard.map(function(row, idx) {
+          var m = Math.floor(row.completion_time_seconds / 60);
+          var s = row.completion_time_seconds % 60;
+          var timeFormatted = m + 'm ' + s + 's';
+          var medal = idx === 0 ? '🥇 ' : idx === 1 ? '🥈 ' : idx === 2 ? '🥉 ' : '';
+          return '<tr>' +
+            '<td>' + medal + (idx + 1) + '</td>' +
+            '<td>' + row.student_name + '</td>' +
+            '<td>' + row.score + ' / 30</td>' +
+            '<td>' + timeFormatted + '</td>' +
+            '</tr>';
+        }).join('');
+
+      } catch (err) {
+        console.error("Erro ao carregar ranking:", err);
+        rankingBody.innerHTML = '<tr><td colspan="4">Atualizando ranking...</td></tr>';
+      }
+    }
+
+    function resetToLogin() {
+      document.getElementById('studentSelect').value = '';
+      document.getElementById('btnStartQuiz').disabled = true;
+      document.getElementById('attemptInfo').innerText = '';
+      applyDynamicTheme(null);
+      goToPage(2);
+    }
+
+    function showModal(msg) {
+      document.getElementById('modalMsg').innerText = msg;
+      document.getElementById('modalAlert').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('modalAlert').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
