@@ -11,7 +11,7 @@
   <style>
     :root {
       --primary-orange: #F15A24;
-      --bg-orange-soft: #D9531E; /* Laranja na mesma tonalidade da logo, porém suave e com menos brilho */
+      --bg-orange-soft: #D95427; /* Tom de laranja idêntico à logo, com menos brilho */
       --dark-purple: #2B1842;
       --card-white: #FFFFFF;
       --boy-bg: #4FC3F7;
@@ -65,7 +65,7 @@
       100% { transform: translateY(-10vh) rotate(360deg); }
     }
 
-    /* HEADER FIXO E SEMPRE VISÍVEL */
+    /* HEADER FIXO */
     .app-header {
       position: sticky;
       top: 0;
@@ -136,7 +136,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* CAIXA DE TEXTO COMPACTA COM SCROLLBAR */
     .summary-scrollbox {
       max-height: 240px;
       overflow-y: auto;
@@ -620,13 +619,23 @@
   </div>
 
   <script>
-    // TRATAMENTO DE IMAGEM DA PROFESSORA SE NÃO CARREGAR
+    // TRATAMENTO DA IMAGEM DA PROFESSORA
+    var teacherImageFallbackAttempts = 0;
     function handleTeacherImageError(img) {
-      img.onerror = null;
-      img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="%232B1842"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-3.8-.85-5.05-2.2.03-1.68 3.37-2.6 5.05-2.6s5.02.92 5.05 2.6C15.8 19.15 14.03 20 12 20z"/></svg>';
+      if (teacherImageFallbackAttempts === 0) {
+        teacherImageFallbackAttempts++;
+        img.src = 'images2.jpeg'; // Tenta extensão .jpeg se .png falhar
+      } else if (teacherImageFallbackAttempts === 1) {
+        teacherImageFallbackAttempts++;
+        img.src = 'images2.jpg'; // Tenta extensão .jpg
+      } else {
+        img.onerror = null;
+        // Desenha avatar Vetorial elegante caso a imagem não esteja na pasta
+        img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="%232B1842"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-3.8-.85-5.05-2.2.03-1.68 3.37-2.6 5.05-2.6s5.02.92 5.05 2.6C15.8 19.15 14.03 20 12 20z"/></svg>';
+      }
     }
 
-    // TROCA DE PÁGINAS
+    // NAVEGAÇÃO ENTRE PÁGINAS
     function goToPage(pageNum) {
       var pages = document.querySelectorAll('.page');
       for (var i = 0; i < pages.length; i++) {
@@ -648,7 +657,7 @@
       try {
         supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
       } catch (e) {
-        console.log("Supabase inicializando.");
+        console.log("Supabase inicializado em modo offline.");
       }
     }
 
@@ -680,8 +689,8 @@
       { id: 16, type: 'mc4', text: '16. Complete a frase: "She ________ (play) video games every weekend."', options: ['plays', 'play', 'playing', 'does play'], answer: 'plays', exp: 'Para o pronome "She" na afirmativa do Simple Present, adicionamos "-s" ao verbo (play -> plays).' },
       { id: 17, type: 'mc4', text: '17. Complete a frase: "They ________ (live) in a big house."', options: ['lives', 'live', 'living', 'is live'], answer: 'live', exp: 'Para o pronome "They", o verbo não sofre alteração e permanece "live".' },
       { id: 18, type: 'mc4', text: '18. Complete a frase: "He ________ (watch) cartoons in the morning."', options: ['watchs', 'watches', 'watch', 'is watch'], answer: 'watches', exp: 'Verbos terminados em -ch recebem "-es" quando usados com He, She ou It (watch -> watches).' },
-      { id: 19, type: 'mc4', text: '19. Complete a frase: "We ________ (not / like) cold pizza."', options: ['doesn\'t like', 'don\'t like', 'not like', 'no like'], answer: 'don\'t like', exp: 'Para formar a negativa com "We", usamos o auxiliar "don\'t".' },
-      { id: 20, type: 'mc4', text: '20. Complete a frase: "Peter ________ (not / eat) vegetables."', options: ['don\'t eat', 'doesn\'t eat', 'not eats', 'doesn\'t eats'], answer: 'doesn\'t eat', exp: 'Peter equivale a "He", portanto usamos o auxiliar "doesn\'t" e o verbo fica na forma base (eat).' },
+      { id: 19, type: 'mc4', text: '19. Complete a frase: "We ________ (not / like) cold pizza."', options: ["doesn't like", "don't like", "not like", "no like"], answer: "don't like", exp: 'Para formar a negativa com "We", usamos o auxiliar "don\'t".' },
+      { id: 20, type: 'mc4', text: '20. Complete a frase: "Peter ________ (not / eat) vegetables."', options: ["don't eat", "doesn't eat", "not eats", "doesn't eats"], answer: "doesn't eat", exp: 'Peter equivale a "He", portanto usamos o auxiliar "doesn\'t" e o verbo fica na forma base (eat).' },
       { id: 21, type: 'mc4', text: '21. Complete a frase: "________ you study English on Mondays?"', options: ['Does', 'Do', 'Are', 'Is'], answer: 'Do', exp: 'Em perguntas com o pronome "You", iniciamos com o auxiliar "Do".' },
       { id: 22, type: 'mc4', text: '22. Complete a frase: "________ Mary wash her car on Saturdays?"', options: ['Do', 'Does', 'Is', 'Are'], answer: 'Does', exp: 'Mary equivale a "She", logo iniciamos a pergunta com "Does".' },
       { id: 23, type: 'mc4', text: '23. Complete a frase: "The dog ________ (run) fast in the park."', options: ['runs', 'run', 'runes', 'running'], answer: 'runs', exp: '"The dog" equivale a "It", por isso adicionamos "-s" ao verbo (run -> runs).' },
@@ -702,7 +711,7 @@
 
       applyDynamicTheme(studentGender);
 
-      document.getElementById('attemptInfo').innerText = "Verificando aluna/aluno...";
+      document.getElementById('attemptInfo').innerText = "Verificando dados do aluno...";
       currentAttempts = await getStudentAttempts(currentStudent);
       
       document.getElementById('attemptInfo').innerText = "Tentativas realizadas: " + currentAttempts + " de 3";
@@ -793,7 +802,8 @@
         html += '<div class="options-grid">';
         q.options.forEach(function(opt) {
           var isSelected = userAnswers[q.id] === opt ? 'selected' : '';
-          html += '<button class="opt-btn ' + isSelected + '" type="button" onclick="selectOption(\'' + opt.replace(/'/g, "\\'") + '\')">' + opt + '</button>';
+          var safeOpt = opt.replace(/'/g, "\\'");
+          html += '<button class="opt-btn ' + isSelected + '" type="button" onclick="selectOption(\'' + safeOpt + '\')">' + opt + '</button>';
         });
         html += '</div>';
       } else if (q.type === 'unscramble') {
@@ -804,7 +814,10 @@
           currentAnswerArray.map(function(w, idx) { return '<span class="word-chip" onclick="removeWord(' + idx + ')">' + w + ' ✕</span>'; }).join('') +
           '</div>' +
           '<div class="word-pool">' +
-          availableWords.map(function(w) { return '<span class="word-chip" onclick="addWord(\'' + w.replace(/'/g, "\\'") + '\')">' + w + '</span>'; }).join('') +
+          availableWords.map(function(w) { 
+            var safeW = w.replace(/'/g, "\\'");
+            return '<span class="word-chip" onclick="addWord(\'' + safeW + '\')">' + w + '</span>'; 
+          }).join('') +
           '</div>';
       }
 
@@ -954,7 +967,7 @@
       if (!supabase) return 0;
       try {
         var fetchPromise = supabase.from('quiz_results').select('id').eq('student_name', studentName);
-        var timeoutPromise = new Promise(function(resolve) { setTimeout(resolve, 1500, { data: [] }); });
+        var timeoutPromise = new Promise(function(resolve) { setTimeout(resolve, 1000, { data: [] }); });
         var res = await Promise.race([fetchPromise, timeoutPromise]);
         return (res && res.data) ? res.data.length : 0;
       } catch (err) {
@@ -983,7 +996,7 @@
       rankingBody.innerHTML = '<tr><td colspan="4">Carregando ranking...</td></tr>';
 
       if (!supabase) {
-        rankingBody.innerHTML = '<tr><td colspan="4">Conectando ao banco...</td></tr>';
+        rankingBody.innerHTML = '<tr><td colspan="4">Carregando dados...</td></tr>';
         return;
       }
 
@@ -1032,7 +1045,7 @@
 
       } catch (err) {
         console.error("Erro ao carregar ranking:", err);
-        rankingBody.innerHTML = '<tr><td colspan="4">Ranking em atualização.</td></tr>';
+        rankingBody.innerHTML = '<tr><td colspan="4">Atualizando ranking...</td></tr>';
       }
     }
 
