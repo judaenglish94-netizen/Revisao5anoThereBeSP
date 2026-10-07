@@ -624,11 +624,9 @@
 
   <script>
     /* =========================================================
-       QUIZ - VERSÃO ROBUSTA
+       QUIZ - VERSÃO ROBUSTA E PROTEGIDA
        - A navegação nunca depende do Supabase.
-       - O Supabase é usado apenas para tentativas/ranking.
-       - Operações de rede têm timeout e falha silenciosa.
-       - O botão Start quiz só é liberado após a seleção.
+       - Botões com trava temporal (impede "ghost click" e pulo de questões)
        ========================================================= */
 
     const SUPABASE_URL = 'https://iolqeovjhayslwkqsduf.supabase.co';
@@ -658,6 +656,9 @@
     let timerInterval = null;
     let attemptsCheckToken = 0;
     let quizStarted = false;
+    
+    // VARIÁVEL NOVA: Trava temporal contra clique duplo
+    let lastNavTime = 0; 
 
     function $(id) {
       return document.getElementById(id);
@@ -918,6 +919,7 @@
         userAnswers = {};
         checkedQuestions = {};
         timerSeconds = 0;
+        lastNavTime = Date.now(); // Inicia a trava temporal
 
         clearInterval(timerInterval);
         $('timerDisplay').innerText = '00:00';
@@ -935,6 +937,7 @@
         userAnswers = {};
         checkedQuestions = {};
         timerSeconds = 0;
+        lastNavTime = Date.now();
 
         $('timerDisplay').innerText = '00:00';
         renderQuestion();
@@ -1149,10 +1152,14 @@
     }
 
     /* =========================
-       NAVEGAÇÃO
+       NAVEGAÇÃO (CORRIGIDA COM TRAVA TEMPORAL)
        ========================= */
 
     function prevQuestion() {
+      const agora = Date.now();
+      if (agora - lastNavTime < 500) return; // Trava de meio segundo
+      lastNavTime = agora;
+
       if (currentQuestionIndex > 0) {
         currentQuestionIndex--;
         renderQuestion();
@@ -1160,6 +1167,10 @@
     }
 
     function nextQuestion() {
+      const agora = Date.now();
+      if (agora - lastNavTime < 500) return; // Trava de meio segundo
+      lastNavTime = agora;
+
       if (currentQuestionIndex < questions.length - 1) {
         currentQuestionIndex++;
         renderQuestion();
